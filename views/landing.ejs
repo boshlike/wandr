@@ -1,10 +1,37 @@
 <%- include("./partials/head.ejs") %> 
 <%- include("./partials/header.ejs") %>
 <!-- Hero content: will be in the middle -->
-<div class="hero-body">
-  <div class="container has-text-centered">
-    <p class="title">Title</p>
-    <p class="subtitle">Subtitle</p>
+<div class="hero-body" id="hero-image">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column">
+          <h1 class="is-size-1">Not all those who wander are lost</h1>
+        </div>
+        <div class="column">
+          <div class="field" id="sign-up">
+            <label class="label">Name</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Text input">
+            </div>
+            <label class="label">Email</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Text input">
+            </div>
+            <label class="label">Password</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Text input">
+            </div>
+            <label class="label">Repeat password</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Text input">
+            </div> <br>
+            <div class="control">
+              <button class="button is-link is-light" type="submit">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <%- include("./partials/footer.ejs") %>

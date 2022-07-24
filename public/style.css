@@ -1,0 +1,25 @@
+body {
+    background-color: #8DCFD0;
+}
+/* Navbar styling */
+.hero-head {
+    background-color: rgba(230, 230, 230, 0.25);
+}
+.navbar-item {
+    background-color: #8DCFD0;
+}
+/* Footer styling */
+.hero-foot {
+    background-color: rgba(230, 230, 230, 0.25);
+}
+/* Landing page styling */
+#hero-image {
+    background-image: url("./img/hero.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#sign-up {
+    background-color: rgba(230, 230, 230, 0.5);
+    padding: 3em;
+    border-radius: 10%;
+}
