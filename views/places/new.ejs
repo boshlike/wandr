@@ -1,0 +1,38 @@
+<%- include("../partials/head.ejs") %> 
+<%- include("../partials/header.ejs") %>
+<!-- Hero content: will be in the middle -->
+<script type='text/javascript' src="maps.js"></script>
+<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetSuggestion' async defer></script>
+<div class="hero-body">
+    <div class="container">
+      <label class="label">Search</label>
+      <div class="control" id="searchBoxContainer">
+        <input class="input" type="text" placeholder="Text input" id="searchBox">
+      </div>
+      <form action="/create" method="POST">
+        <div class="field" id="add-item">
+            <label class="label">Country</label>
+            <div class="control" id="countryContainer">
+              <input class="input" type="text" placeholder="Text input" id="country">
+            </div>
+            <div class="control" id="countryContainer">
+              <input class="input" type="text" placeholder="Country geo" id="country-geo">
+            </div>
+            <label class="label">Place</label>
+            <div class="control" id="placeContainer">
+              <input class="input" type="text" placeholder="Text input" id="place">
+            </div>
+            <div class="control" id="placeContainer">
+              <input class="input" type="text" placeholder="Place geo" id="place-geo">
+            </div> <br>
+            <div class="control">
+              <button class="button is-link is-light" type="submit">Submit</button>
+            </div>
+          </div>
+      </form> 
+    </div>
+  </div>
+</div>
+
+
+<%- include("../partials/footer.ejs") %>

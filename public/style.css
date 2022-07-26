@@ -23,3 +23,8 @@ body {
     padding: 3em;
     border-radius: 10%;
 }
+/* Map styling */
+#my-map {
+    height: 40vh;
+    width: 70vw;
+}

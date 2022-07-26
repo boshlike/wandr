@@ -1,9 +1,16 @@
 <%- include("../partials/head.ejs") %> 
 <%- include("../partials/header.ejs") %>
+<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+<script type="text/javascript" src="maps.js"></script>
 <!-- Hero content: will be in the middle -->
 <div class="hero-body">
-    <div class="container">
-      <h1>Homepage</h1>
+    <div class="container has-text-centered">
+      <div>
+        <div id="my-map"></div>
+      </div>
+      <div>
+        <h1>Homepage</h1>
+      </div>
     </div>
 </div>
 <%- include("../partials/footer.ejs") %>

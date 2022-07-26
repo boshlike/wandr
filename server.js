@@ -13,6 +13,14 @@ app.get("/home", (req, res) => {
     res.render("dash/index_country.ejs");
 });
 
+app.get("/create", (req, res) => {
+    res.render("places/new.ejs");
+});
+
+app.get("/test", (req, res) => {
+    res.render("test.ejs");
+});
+
 app.get("/", (req, res) => {
     res.render("landing.ejs");
 });
