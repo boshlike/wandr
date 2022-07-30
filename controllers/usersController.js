@@ -46,7 +46,26 @@ const controller = {
             res.send('incorrect password');
             return;
         }
-
+        // Log user in by creating a session
+        req.session.regenerate((err) => {
+            if (err) {
+                res.send("Unable to regenerate session");
+                console.log(err)
+                return;
+            }
+            // Store user information in the session
+            req.session.save((err) => {
+                if (err) {
+                    res.send("Unable to save session");
+                    console.log(err)
+                    return;
+                }
+                res.redirect("/users/home")
+            })
+        })
+    },
+    showDashboard: (req, res) => {
+        res.render("dash/indexCountry.ejs")
     }
 }
 module.exports = controller;

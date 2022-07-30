@@ -1,4 +1,5 @@
 // Require external packages
+require("dotenv").config();
 const express = require("express");
 const mongoose = require('mongoose');
 const session = require("express-session");
@@ -15,12 +16,22 @@ app.set("view engine", "ejs");
 app.use(express.static('public'));
 // Add the middleware
 app.use(express.urlencoded({extended: true}));
+app.use(session({
+    secret: process.env.SECRET_SESSION,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        httpOnly: false
+    }
+}))
 
 //User routes
 app.get("/register", usersController.showRegistrationForm);
 app.post("/register", usersController.register);
 app.get("/login", usersController.displayLoginPage);
 app.post("/login", usersController.login);
+app.get("/users/home", usersController.showDashboard);
 
 app.get("/home", (req, res) => {
     res.render("dash/index_country.ejs");
