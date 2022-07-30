@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 const session = require("express-session");
 // Require internal dependencies
 const db = require("./database/wandr_db_connect");
-const usersController = require("./controllers/usersController");
+const usersController = require("./controllers/users/usersController");
 const formsController = require("./controllers/forms/formsController");
+const placesController = require("./controllers/places/placesController");
 // Create app and port
 const app = express();
 const port = 3000;
@@ -32,27 +33,16 @@ app.post("/register", usersController.register);
 app.get("/login", usersController.displayLoginPage);
 app.post("/login", usersController.login);
 app.get("/users/home", usersController.showDashboard);
-
 //Client side fetch routes
 app.get("/fetchdata/:data", formsController.getFormData);
-
-// app.get("/home", (req, res) => {
-//     res.render("dash/index_country.ejs");
-// });
-
-app.get("/places/create", (req, res) => {
-    res.render("places/new.ejs");
-});
-
-// app.post("/create", (req, res) => {
-//     console.log(req.body)
-//     res.json(req.body);
-// });
-
+//Places routes
+app.get("/places/create", placesController.showCreateForm);
+app.post("/places/create", placesController.createPlace);
+//Test routes to be deleted
 app.get("/test", (req, res) => {
     res.render("test.ejs");
 });
-
+//Landing route
 app.get("/", (req, res) => {
     res.render("landing.ejs");
 });

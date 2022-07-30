@@ -7,8 +7,7 @@
       <div class="control" id="searchBoxContainer">
         <input class="input" type="text" placeholder="Text input" id="searchBox">
       </div> <br>
-      <form action="/create" method="post" class="field" id="add-item">
-        
+      <form action="/places/create" method="post" class="field" id="add-item">
             <label class="label">Country</label>
             <div class="control">
               <input class="input" type="text" name="country">
@@ -19,10 +18,10 @@
             </div>
             <label class="label">Landmark</label>
             <div class="control">
-              <input class="input" type="text" name="place">
+              <input class="input" type="text" name="landmark">
             </div>  
             <div class="control select">
-              <select name="visited-planned" id="visited-planned" onchange="toggleVisitedPlanned()">
+              <select name="visitedPlanned" id="visited-planned" onchange="toggleVisitedPlanned()">
                 <option value="" id="disable-selection">Select one:</option>
                 <option value="visited">Visited</option>
                 <option value="planned">Planned</option>
@@ -34,8 +33,6 @@
             <div class="control">
               <input class="button" type="submit" value="Submit" form="add-item">
             </div>
-          
-      
     </div>
   </div>
 </div>

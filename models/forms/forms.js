@@ -19,7 +19,7 @@ const forms = {
     <label class="label">Add images</label>
     <div class="file">
       <label class="file-label">
-        <input class="file-input" type="file" name="resume" />
+        <input class="file-input" type="file" name="imgs" />
         <span class="file-cta">
           <span class="file-icon">
             <i class="fas fa-upload"></i>

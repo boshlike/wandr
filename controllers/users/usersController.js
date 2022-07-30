@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const userModel = require("../models/users/users");
+const userModel = require("../../models/users/users");
 
 const controller = {
     showRegistrationForm: (req, res) => {
