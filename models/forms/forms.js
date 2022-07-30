@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-    <meta charset="utf-8" />
-  </head>
-  <body>
+const forms = {
+    visited: `
     <label class="label">Date from</label>
     <div class="control">
       <input class="input" type="date" name="dateFrom" />
@@ -32,5 +27,12 @@
         </span>
       </label>
     </div>
-  </body>
-</html>
+    `,
+    planned: `
+    <label class="label">Notes</label>
+    <div class="control">
+      <input class="textarea" type="text" name="notes" />
+    </div>
+    `
+}
+module.exports = forms;

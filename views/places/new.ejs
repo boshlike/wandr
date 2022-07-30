@@ -1,38 +1,42 @@
 <%- include("../partials/head.ejs") %> 
 <%- include("../partials/header.ejs") %>
 <!-- Hero content: will be in the middle -->
-<script type='text/javascript' src="maps.js"></script>
-<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetSuggestion' async defer></script>
 <div class="hero-body">
     <div class="container">
       <label class="label">Search</label>
       <div class="control" id="searchBoxContainer">
         <input class="input" type="text" placeholder="Text input" id="searchBox">
-      </div>
+      </div> <br>
       <form action="/create" method="post" class="field" id="add-item">
-        <!-- <div class="field" id="add-item"> -->
+        
             <label class="label">Country</label>
-            <div class="control" id="countryContainer">
-              <input class="input" type="text" placeholder="Text input" id="country">
-            </div>
-            <div class="control" id="countryContainer">
-              <input class="input" type="text" placeholder="Country geo" id="country-geo">
-            </div>
-            <label class="label">Place</label>
-            <div class="control" id="placeContainer">
-              <input class="input" type="text" placeholder="Text input" id="place">
-            </div>
-            <div class="control" id="placeContainer">
-              <input class="input" type="text" placeholder="Place geo" id="place-geo">
-            </div> <br>
             <div class="control">
-              <input type="submit" value="Submit">
+              <input class="input" type="text" name="country">
             </div>
-          <!-- </div> -->
-      </form> 
+            <label class="label">Locality</label>
+            <div class="control">
+              <input class="input" type="text" name="place">
+            </div>
+            <label class="label">Landmark</label>
+            <div class="control">
+              <input class="input" type="text" name="place">
+            </div>  
+            <div class="control select">
+              <select name="visited-planned" id="visited-planned" onchange="toggleVisitedPlanned()">
+                <option value="" id="disable-selection">Select one:</option>
+                <option value="visited">Visited</option>
+                <option value="planned">Planned</option>
+              </select>
+            </div>
+            <div id="form-items"></div>
+            </form>  
+            <br>
+            <div class="control">
+              <input class="button" type="submit" value="Submit" form="add-item">
+            </div>
+          
+      
     </div>
   </div>
 </div>
-
-
 <%- include("../partials/footer.ejs") %>
