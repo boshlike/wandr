@@ -12,7 +12,6 @@ const port = 3000;
 // Set the view engine
 app.set("view engine", "ejs");
 // Add the static files
-
 app.use(express.static('public'));
 // Add the middleware
 app.use(express.urlencoded({extended: true}));
@@ -33,22 +32,22 @@ app.get("/login", usersController.displayLoginPage);
 app.post("/login", usersController.login);
 app.get("/users/home", usersController.showDashboard);
 
-app.get("/home", (req, res) => {
-    res.render("dash/index_country.ejs");
-});
+// app.get("/home", (req, res) => {
+//     res.render("dash/index_country.ejs");
+// });
 
-app.get("/create", (req, res) => {
-    res.render("places/new.ejs");
-});
+// app.get("/create", (req, res) => {
+//     res.render("places/new.ejs");
+// });
 
-app.post("/create", (req, res) => {
-    console.log(req.body)
-    res.json(req.body);
-});
+// app.post("/create", (req, res) => {
+//     console.log(req.body)
+//     res.json(req.body);
+// });
 
-app.get("/test", (req, res) => {
-    res.render("test.ejs");
-});
+// app.get("/test", (req, res) => {
+//     res.render("test.ejs");
+// });
 
 app.get("/", (req, res) => {
     res.render("landing.ejs");
