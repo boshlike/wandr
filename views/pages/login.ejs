@@ -1,0 +1,28 @@
+<%- include("../partials/head.ejs") %> 
+<%- include("../partials/header.ejs") %>
+<!-- Hero content: will be in the middle -->
+<div class="hero-body" id="hero-image">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column">
+        <form action="/login" method="post">
+            <div class="field" id="login">
+            <label class="label">Email</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Text input" name="email">
+            </div>
+            <label class="label">Password</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Text input" name="password">
+            </div>
+            <div class="control">
+              <button class="button is-link is-light" type="submit">Login</button>
+            </div>
+          </div> 
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include("../partials/footer.ejs") %>

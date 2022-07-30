@@ -51,7 +51,7 @@ async function geocodeApiCall(url) {
 
 async function selectedSuggestion(result) {
     //Populate the address textbox values.
-    console.log(result.address)
+    console.log(result)
     const coord = await getCountryGeocode(result.address.countryRegionISO2, result.address.locality);
     const countryCoord = coord[0];
     const localityCoord = coord[1];
