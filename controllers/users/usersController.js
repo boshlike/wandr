@@ -16,7 +16,8 @@ const controller = {
             await userModel.create({
                 name: req.body.name,
                 email: req.body.email,
-                hash: hash
+                hash: hash,
+                aboutMe: ""
             })
         } catch(err) {
             console.log(err);
@@ -24,7 +25,7 @@ const controller = {
             return;
         }
         // Redirect to login
-        res.redirect("/login");
+        res.redirect("/users/login");
     },
     displayLoginPage: (req, res) => {
         res.render("pages/login.ejs");
@@ -67,9 +68,9 @@ const controller = {
     showDashboard: (req, res) => {
         res.render("dash/indexCountry.ejs")
     },
-    showProfile: (req, res) => {
-        res.send("Show profile")
-        // res.render("dash/indexCountry.ejs");
+    showProfile: async (req, res) => {
+        const userProfile = await userModel.findOne({email: req.session.user});
+        res.render("users/profile.ejs", {userProfile});
     },
     logout: async (req, res) => {
         req.session.user = null;

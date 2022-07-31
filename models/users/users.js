@@ -13,6 +13,13 @@ const usersSchema = new mongoose.Schema({
     hash: {
         type: String,
         required: true
+    },
+    aboutMe: {
+        type: String
+    },
+    img: {
+        data: Buffer,
+        contentType: String
     }
 });
 
