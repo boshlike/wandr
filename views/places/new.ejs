@@ -1,6 +1,8 @@
 <%- include("../partials/head.ejs") %> 
 <%- include("../partials/header.ejs") %>
 <!-- Hero content: will be in the middle -->
+<script src="/js/maps.js"></script>
+<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetSuggestion' async defer></script>
 <div class="hero-body">
     <div class="container">
       <label class="label">Search</label>
@@ -10,16 +12,19 @@
       <form action="/places/create" method="post" class="field" id="add-item">
             <label class="label">Country</label>
             <div class="control">
-              <input class="input" type="text" name="country">
+              <input class="input" type="text" name="country" id="country-name">
             </div>
             <label class="label">Locality</label>
             <div class="control">
-              <input class="input" type="text" name="place">
+              <input class="input" type="text" name="locality" id="locality-name">
             </div>
             <label class="label">Landmark</label>
             <div class="control">
-              <input class="input" type="text" name="landmark">
-            </div>  
+              <input class="input" type="text" name="landmark" id="landmark-name">
+            </div>
+            <input type="hidden" name="localityCenter" id="locality-center">
+            <input type="hidden" name="landmarkCenter" id="landmark-center">
+            <label class="label">Visited/Planned</label>  
             <div class="control select">
               <select name="visitedPlanned" id="visited-planned" onchange="toggleVisitedPlanned()">
                 <option value="" id="disable-selection">Select one:</option>

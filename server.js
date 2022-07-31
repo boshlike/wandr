@@ -6,8 +6,9 @@ const session = require("express-session");
 // Require internal dependencies
 const db = require("./database/wandr_db_connect");
 const usersController = require("./controllers/users/usersController");
-const formsController = require("./controllers/forms/formsController");
+const clientRequestController = require("./controllers/client/clientRequestsController");
 const placesController = require("./controllers/places/placesController");
+const middleware = require("./middleware/auth_middleware");
 // Create app and port
 const app = express();
 const port = 3000;
@@ -25,16 +26,19 @@ app.use(session({
         secure: false,
         httpOnly: false
     }
-}))
-
+}));
+app.use(middleware.authUser);
 //User routes
 app.get("/register", usersController.showRegistrationForm);
 app.post("/register", usersController.register);
-app.get("/login", usersController.displayLoginPage);
-app.post("/login", usersController.login);
-app.get("/users/home", usersController.showDashboard);
+app.get("/users/login", usersController.displayLoginPage);
+app.post("/users/login", usersController.login);
+app.get("/users/logout", usersController.logout);
+app.get("/users/home", middleware.isAuthenticated, usersController.showDashboard);
+app.get("/users/profile", middleware.isAuthenticated, usersController.showProfile);
 //Client side fetch routes
-app.get("/fetchdata/:data", formsController.getFormData);
+app.get("/fetchformdata/:data", clientRequestController.getFormData);
+app.get("/fetchstring", clientRequestController.getApiKey);
 //Places routes
 app.get("/places/create", placesController.showCreateForm);
 app.post("/places/create", placesController.createPlace);
@@ -46,12 +50,10 @@ app.get("/test", (req, res) => {
 app.get("/", (req, res) => {
     res.render("landing.ejs");
 });
-
 mongoose.connect(db.connStr, db.connOpt);
 mongoose.connection.once("open", () => {
     console.log("=====> Connected to Wandr DB <=====")
-})
-
+});
 app.listen(port, async () => {
     console.log(`=====> Wandr listening on ${port} <=====`);
 });

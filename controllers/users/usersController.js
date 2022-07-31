@@ -39,7 +39,6 @@ const controller = {
             res.send(err);
             return;
         }
-        console.log(user);
         // Use bcrypt to compare given password to one stored in DB
         const passwordMatches = await bcrypt.compare(validatedResults.password, user.hash);
         if (!passwordMatches) {
@@ -53,6 +52,7 @@ const controller = {
                 console.log(err)
                 return;
             }
+            req.session.user = validatedResults.email;
             // Store user information in the session
             req.session.save((err) => {
                 if (err) {
@@ -66,6 +66,26 @@ const controller = {
     },
     showDashboard: (req, res) => {
         res.render("dash/indexCountry.ejs")
+    },
+    showProfile: (req, res) => {
+        res.send("Show profile")
+        // res.render("dash/indexCountry.ejs");
+    },
+    logout: async (req, res) => {
+        req.session.user = null;
+        req.session.save((err) => {
+            if (err) {
+                res.send(err);
+                return;
+            }
+            req.session.regenerate((err) => {
+                if (err) {
+                    res.send(err);
+                    return;
+                }
+                res.redirect("/");
+            })
+        })
     }
 }
 module.exports = controller;

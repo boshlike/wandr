@@ -7,10 +7,10 @@ const controllers = {
     },
     createPlace: async (req, res) => {
         // TODO validations
-        // Check if the country already exists in the database, if not, get geolocation data
+        // Check if the country already exists in the database, if not, get geolocation data and store as a country
         const country = req.body.country;
-        const exists = await countryModel.findOne({name: `${country}`});
-        if (!exists) {
+        const countrySearch = await countryModel.findOne({name: `${country}`});
+        if (!countrySearch) {
             const url = `http://dev.virtualearth.net/REST/v1/Locations?query=${country}&key=${process.env.BING_API}`;
             const data = await helpers.fetchData(url);
             const countryDocument = {
@@ -25,7 +25,6 @@ const controllers = {
                 res.send("failed to create country");
                 return;
             }
-           
         }
         res.redirect("/places/create");
     }

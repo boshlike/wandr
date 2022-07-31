@@ -12,12 +12,12 @@ const toggleVisitedPlanned = async () => {
     // Get the form HTML from the server and store in an element
     const dataToFetch = document.querySelector("#visited-planned").value;
     console.log(dataToFetch)
-    const formData = await fetchForm(`${location.origin}/fetchdata/${dataToFetch}`);
+    const formData = await fetchData(`${location.origin}/fetchformdata/${dataToFetch}`);
     const div = document.querySelector("#form-items");
     div.innerHTML = formData;
 
 }
-const fetchForm = async (url) => {
+const fetchData = async (url) => {
     const response = await fetch(url)
     const data = await response.json()
     return data;
