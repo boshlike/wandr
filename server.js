@@ -40,8 +40,8 @@ app.get("/users/profile", middleware.isAuthenticated, usersController.showProfil
 app.get("/fetchformdata/:data", clientRequestController.getFormData);
 app.get("/fetchstring", clientRequestController.getApiKey);
 //Places routes
-app.get("/places/create", placesController.showCreateForm);
-app.post("/places/create", placesController.createPlace);
+app.get("/places/create", middleware.isAuthenticated, placesController.showCreateForm);
+app.post("/places/create", middleware.isAuthenticated, placesController.createPlace);
 //Test routes to be deleted
 app.get("/test", (req, res) => {
     res.render("test.ejs");

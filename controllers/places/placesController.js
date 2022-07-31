@@ -1,5 +1,7 @@
 require("dotenv").config();
 const countryModel = require("../../models/places/countries");
+const placeModel = require("../../models/places/places");
+const userModel = require("../../models/users/users");
 const helpers = require("../../helpers/helpers");
 const controllers = {
     showCreateForm: (req, res) => {
@@ -7,26 +9,59 @@ const controllers = {
     },
     createPlace: async (req, res) => {
         // TODO validations
+        const validatedResults = req.body;
+        console.log(validatedResults)
         // Check if the country already exists in the database, if not, get geolocation data and store as a country
-        const country = req.body.country;
-        const countrySearch = await countryModel.findOne({name: `${country}`});
-        if (!countrySearch) {
-            const url = `http://dev.virtualearth.net/REST/v1/Locations?query=${country}&key=${process.env.BING_API}`;
+        const country = validatedResults.countryCode;
+        const countryObject = await countryModel.findOne({countryCode: `${country}`});
+        const userObject = await userModel.findOne({email: req.session.user});
+        const userId = userObject._id;
+        let countryId = countryObject ? countryObject._id : null;
+        let placeId = null;
+        if (!countryObject) {
+            const url = `http://dev.virtualearth.net/REST/v1/Locations?countryRegion=${country}&key=${process.env.BING_API}`;
             const data = await helpers.fetchData(url);
             const countryDocument = {
                 name: data.data.resourceSets[0].resources[0].name,
+                countryCode: country,
                 coordinates: data.data.resourceSets[0].resources[0].point.coordinates,
                 bbox: data.data.resourceSets[0].resources[0].bbox
             }
             try {
-                await countryModel.create(countryDocument);
+                const object = await countryModel.create(countryDocument);
+                countryId = object._id;
             } catch(err) {
                 console.log(err);
                 res.send("failed to create country");
                 return;
             }
         }
-        res.redirect("/places/create");
+        // Construct the object for the Place and add to database
+        const place = {
+            country: countryId,
+            locality: validatedResults.locality,
+            landmark: validatedResults.landmark,
+            coordinates: validatedResults.center.split(","),
+            createdBy: userId,
+            visitedPlanned: validatedResults.visitedPlanned
+        }
+        try {
+            const object = await placeModel.create(place);
+            placeId = object._id;
+        } catch(err) {
+            console.log(err);
+            res.send("failed to create country");
+            return;
+        }
+        // Link the place to the user that entered it
+        if (validatedResults.visitedPlanned === "visited") {
+            userObject.visited.push(placeId);
+            userObject.save();
+        } else {
+           userObject.planned.push(placeId);
+           userObject.save();
+        }
+        res.redirect("/users/home");
     }
 }
 module.exports = controllers;

@@ -16,8 +16,7 @@ const controller = {
             await userModel.create({
                 name: req.body.name,
                 email: req.body.email,
-                hash: hash,
-                aboutMe: ""
+                hash: hash
             })
         } catch(err) {
             console.log(err);

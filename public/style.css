@@ -23,8 +23,12 @@ body {
     padding: 3em;
     border-radius: 10%;
 }
-/* Map styling */
+/* Home and Map styling */
 #my-map {
-    height: 40vh;
+    height: 50vh;
     width: 70vw;
+    max-width: 600px;
+}
+.panel {
+    background-color: aliceblue;
 }

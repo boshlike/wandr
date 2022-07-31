@@ -20,6 +20,12 @@ const usersSchema = new mongoose.Schema({
     img: {
         data: Buffer,
         contentType: String
+    },
+    visited: {
+        type: Array
+    },
+    planned: {
+        type: Array
     }
 });
 
