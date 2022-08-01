@@ -38,7 +38,7 @@ app.get("/users/home", middleware.isAuthenticated, usersController.showDashboard
 app.get("/users/profile", middleware.isAuthenticated, usersController.showProfile);
 //Client side fetch routes
 app.get("/fetchformdata/:data", clientRequestController.getFormData);
-app.get("/fetchstring", clientRequestController.getApiKey);
+app.get("/fetchmapdata", clientRequestController.getMapsDataObject);
 //Places routes
 app.get("/places/create", middleware.isAuthenticated, placesController.showCreateForm);
 app.post("/places/create", middleware.isAuthenticated, placesController.createPlace);

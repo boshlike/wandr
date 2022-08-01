@@ -1,6 +1,6 @@
 // Autosuggest function (note needs to be in this format)
 async function GetSuggestion() {
-    const credentials = await fetchString(`${location.origin}/fetchstring`);
+    const dataObject = await fetchObject(`${location.origin}/fetchmapdata`);
     Microsoft.Maps.loadModule('Microsoft.Maps.AutoSuggest', {
         callback: function () {
             const manager = new Microsoft.Maps.AutosuggestManager({
@@ -12,7 +12,7 @@ async function GetSuggestion() {
         errorCallback: function(msg){
             alert(msg);
         },
-        credentials: credentials 
+        credentials: dataObject.credentials 
     });
 }
 const selectPlace = (result) => {
@@ -25,19 +25,37 @@ const selectPlace = (result) => {
         document.querySelector("#landmark-name").value = result.title;
     }
 }
-const fetchString = async (url) => {
+const fetchObject = async (url) => {
     const response = await fetch(url)
     const data = await response.json()
     return data;
 }
 async function GetMap() {
-    const credentials = await fetchString(`${location.origin}/fetchstring`);
+    const dataObject = await fetchObject(`${location.origin}/fetchmapdata`);
+    const countryPlannedCoords = dataObject.planned.map(place => place[1].coordinates);
+    const countryVisitedCoords = dataObject.visited.map(place => place[1].coordinates);
+    const placesPlannedPins = dataObject.planned.map(place => place[0].coordinates);
     const map = new Microsoft.Maps.Map('#my-map', {
-        credentials: credentials,
+        credentials: dataObject.credentials ,
         center: new Microsoft.Maps.Location(51.50632, -0.12714),
         mapTypeId: Microsoft.Maps.MapTypeId.grayscale,
-        zoom: 0
+        zoom: 0,
+        disableMapTypeSelectorMouseOver: true,
+        disableScrollWheelZoom: true,
+        disablePanning: true,
+        disableZooming: true,
+        showLocateMeButton: false,
+        showMapTypeSelector: false
     });
-
-    //Add your post map load code here.
+    countryPlannedCoords.forEach(coord => {
+        map.entities.push(createPin(coord, "red"));
+    });
+    countryVisitedCoords.forEach(coord => {
+        map.entities.push(createPin(coord, "blue"));
+    });
+}
+const createPin = (arr, color) => {
+    const location = new Microsoft.Maps.Location(arr[0], arr[1]);
+    const pin = new Microsoft.Maps.Pushpin(location, {color: color});
+    return pin;
 }
