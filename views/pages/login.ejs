@@ -1,18 +1,18 @@
 <%- include("../partials/head.ejs") %> 
 <%- include("../partials/header.ejs") %>
 <!-- Hero content: will be in the middle -->
-<div class="hero-body" id="hero-image">
+<div class="hero-body">
     <div class="container">
       <div class="columns is-centered">
         <div class="column">
         <form action="/users/login" method="post">
             <div class="field" id="login">
             <label class="label">Email</label>
-            <div class="control">
+            <div class="control mb-2">
               <input class="input" type="text" placeholder="Text input" name="email">
             </div>
             <label class="label">Password</label>
-            <div class="control">
+            <div class="control mb-2">
               <input class="input" type="password" placeholder="Text input" name="password">
             </div>
             <div class="control">

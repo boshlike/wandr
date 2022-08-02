@@ -8,27 +8,29 @@
           <h1 class="is-size-1">Not all those who wander are lost</h1>
         </div>
         <div class="column">
+        <form action="/register" method="post">
           <div class="field" id="sign-up">
             <label class="label">Name</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Text input">
+              <input class="input" type="text" name="name">
             </div>
             <label class="label">Email</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Text input">
+              <input class="input" type="email" name="email">
             </div>
             <label class="label">Password</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Text input">
+              <input class="input" type="password" name="password">
             </div>
             <label class="label">Repeat password</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Text input">
+              <input class="input" type="password" name="confirm-password">
             </div> <br>
             <div class="control">
               <button class="button is-link is-light" type="submit">Submit</button>
             </div>
           </div>
+        </form>
         </div>
       </div>
     </div>

@@ -42,6 +42,7 @@ app.get("/fetchmapdata", clientRequestController.getMapsDataObject);
 //Places routes
 app.get("/places/create", middleware.isAuthenticated, placesController.showCreateForm);
 app.post("/places/create", middleware.isAuthenticated, placesController.createPlace);
+app.get("/places/:place_id", middleware.isAuthenticated, placesController.showPlace);
 //Test routes to be deleted
 app.get("/test", (req, res) => {
     res.render("test.ejs");

@@ -1,4 +1,5 @@
 require("dotenv").config();
+var ObjectID = require('mongodb').ObjectID;
 const countryModel = require("../../models/places/countries");
 const placeModel = require("../../models/places/places");
 const userModel = require("../../models/users/users");
@@ -10,10 +11,9 @@ const controllers = {
     createPlace: async (req, res) => {
         // TODO validations
         const validatedResults = req.body;
-        console.log(validatedResults)
         // Check if the country already exists in the database, if not, get geolocation data and store as a country
         const country = validatedResults.countryCode;
-        const countryObject = await countryModel.findOne({countryCode: `${country}`});
+        let countryObject = await countryModel.findOne({countryCode: `${country}`});
         const userObject = await userModel.findOne({email: req.session.user});
         const userId = userObject._id;
         let countryId = countryObject ? countryObject._id : null;
@@ -29,6 +29,7 @@ const controllers = {
             }
             try {
                 const object = await countryModel.create(countryDocument);
+                countryObject = await countryModel.findOne({countryCode: `${country}`});
                 countryId = object._id;
             } catch(err) {
                 console.log(err);
@@ -39,11 +40,13 @@ const controllers = {
         // Construct the object for the Place and add to database
         const place = {
             country: countryId,
+            countryName: countryObject.name,
             locality: validatedResults.locality,
             landmark: validatedResults.landmark,
             coordinates: validatedResults.center.split(","),
             createdBy: userId,
-            visitedPlanned: validatedResults.visitedPlanned
+            visitedPlanned: validatedResults.visitedPlanned,
+            notes: validatedResults.notes
         }
         try {
             const object = await placeModel.create(place);
@@ -62,6 +65,11 @@ const controllers = {
            userObject.save();
         }
         res.redirect("/users/home");
+    },
+    showPlace: async (req, res) => {
+        const idString = req.params.place_id;
+        const place = await placeModel.findById(idString);
+        res.render("places/show.ejs", place);
     }
 }
 module.exports = controllers;

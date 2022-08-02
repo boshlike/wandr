@@ -1,0 +1,38 @@
+<%- include("../partials/head.ejs") %> 
+<%- include("../partials/header.ejs") %>
+<!-- Hero content: will be in the middle -->
+<script src="/js/maps.js"></script>
+<!-- <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetSuggestion' async defer></script> -->
+<div class="hero-body">
+    <div class="container">
+        <div class="columns">
+            <div class="column"></div>
+            <div class="column">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Locality</th>
+                            <td><%= locality %></td>
+                        </tr>
+                        <tr>
+                            <th>Landmark</th>
+                            <td><%= landmark %></td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td><%= visitedPlanned.toUpperCase() %></td>
+                        </tr>
+                        <tr>
+                            <th>Notes</th>
+                            <td><%= notes %></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a class="button" href="#">Edit</a>
+                <a class="button" href="#">Delete</a>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<%- include("../partials/footer.ejs") %>

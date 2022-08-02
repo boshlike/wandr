@@ -15,13 +15,16 @@
             <a>Visited</a>
             <a>Planned</a>
           </p>
-
-          <a class="panel-block is-active">
-            <span class="panel-icon">
-              <i class="fas fa-book" aria-hidden="true"></i>
-            </span>
-            bulma
-          </a>
+          <% visited.forEach(element => { %>
+            <a class="panel-block is-active" href="/places/<%= element[0]._id %> ">
+              <%= element[1].name %>
+            </a>
+          <% }) %>
+          <% planned.forEach(element => { %>
+            <a class="panel-block is-active" href="/places/<%= element[0]._id %> ">
+              <%= element[1].name %>
+            </a>
+          <% }) %>
         </nav>
       </div>
     </div>

@@ -1,5 +1,7 @@
 body {
     background-color: #8DCFD0;
+    font-family: 'Indie Flower', cursive;
+    font-weight: bold;
 }
 /* Navbar styling */
 .hero-head {
