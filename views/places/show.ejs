@@ -13,6 +13,10 @@
                 <table class="table">
                     <tbody>
                         <tr>
+                            <th>Country</th>
+                            <td><%= countryName %></td>
+                        </tr>
+                        <tr>
                             <th>Locality</th>
                             <td><%= locality %></td>
                         </tr>
@@ -22,7 +26,7 @@
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td><%= visitedPlanned.toUpperCase() %></td>
+                            <td><%= visitedPlanned.charAt(0).toUpperCase() + visitedPlanned.slice(1) %></td>
                         </tr>
                         <tr>
                             <th>Notes</th>
@@ -31,8 +35,8 @@
                     </tbody>
                 </table>
                 <div>
-                    <a class="button" href="#">Edit</a>
-                    <a class="button" href="#">Delete</a> 
+                    <a class="button" href="/places/edit/<%= _id %> ">Edit</a>
+                    <a class="button" href="/places/delete/<%= _id %> ">Delete</a> 
                 </div>
             </div>
         </div>

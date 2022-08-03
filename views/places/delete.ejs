@@ -1,0 +1,16 @@
+<%- include("../partials/head.ejs") %> 
+<%- include("../partials/header.ejs") %>
+<!-- Hero content: will be in the middle -->
+<div class="hero-body is-align-items-start">
+    <div class="container is-flex is-justify-content-center">
+        <h1 class="is-size-1">Are you sure you want to delete?</h1>
+        <form action="/places/delete/<%= _id %>?_method=DELETE" method="post" class="field" id="add-item">
+            <div class="control">
+              <input class="button mt-3" type="submit" value="Yes" name="yes">
+              <input class="button mt-3" type="submit" value="No" name="no">
+            </div>
+        </form>    
+    </div>
+  </div>
+</div>
+<%- include("../partials/footer.ejs") %>

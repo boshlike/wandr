@@ -1,0 +1,35 @@
+<%- include("../partials/head.ejs") %> 
+<%- include("../partials/header.ejs") %>
+<!-- Hero content: will be in the middle -->
+<script src="/js/maps.js"></script>
+<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetSuggestion' async defer></script>
+<div class="hero-body">
+    <div class="container">
+      <label class="label">Search</label>
+      <div class="control" id="searchBoxContainer">
+        <input class="input" type="text" placeholder="Text input" id="searchBox">
+      </div> <br>
+      <form action="/places/create" method="post" class="field" id="add-item">
+            <input class="input" type="hidden" name="country" id="country-name">
+            <input class="input" type="hidden" name="countryCode" id="country-code">
+            <input class="input" type="hidden" name="locality" id="locality-name">
+            <input class="input" type="hidden" name="landmark" id="landmark-name">
+            <input type="hidden" name="center" id="center">
+            <label class="label">Visited/Planned</label>  
+            <div class="control select">
+              <select name="visitedPlanned" id="visited-planned" onchange="toggleVisitedPlanned()">
+                <option value="" id="disable-selection">Select one:</option>
+                <option value="visited">Visited</option>
+                <option value="planned">Planned</option>
+              </select>
+            </div>
+            <div id="form-items"></div>
+            </form>  
+            <br>
+            <div class="control">
+              <input class="button" type="submit" value="Submit" form="add-item">
+            </div>
+    </div>
+  </div>
+</div>
+<%- include("../partials/footer.ejs") %>

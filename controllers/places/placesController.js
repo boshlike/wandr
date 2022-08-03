@@ -71,6 +71,34 @@ const controllers = {
         const idString = req.params.place_id;
         const place = await placeModel.findById(idString);
         res.render("places/show.ejs", place);
+    },
+    editPlace: async (req, res) => {
+        res.send("edit page");
+    },
+    showDeletePlace: (req, res) => {
+        const id = req.params.place_id;
+        res.render("places/delete.ejs", {"_id": id});
+    },
+    deletePlace: async (req, res) => {
+        if (req.body.yes) {
+            try {
+                const something = await userModel.findOne({
+                    email: req.session.user
+                  }, 
+                  {
+                    $pullAll: {
+                      visited: [req.params.place_id],
+                      planned: [req.params.place_id]
+                    },
+                  });
+                // await placeModel.deleteOne({_id: req.params.place_id});  
+            } catch(err) {
+                res.send("failed to delete");
+                console.log(err);
+                return;
+            }
+        }
+        res.redirect("/users/home");
     }
 }
 module.exports = controllers;

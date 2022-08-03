@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require('mongoose');
 const session = require("express-session");
+const methodOverride = require('method-override');
 // Require internal dependencies
 const db = require("./database/wandr_db_connect");
 const usersController = require("./controllers/users/usersController");
@@ -18,6 +19,7 @@ app.set("view engine", "ejs");
 app.use(express.static('public'));
 // Add the middleware
 app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 app.use(session({
     secret: process.env.SECRET_SESSION,
     resave: false,
@@ -44,6 +46,9 @@ app.get("/fetchmapdata/places/:_id", clientRequestController.getOnePlaceData);
 app.get("/places/create", middleware.isAuthenticated, placesController.showCreateForm);
 app.post("/places/create", middleware.isAuthenticated, placesController.createPlace);
 app.get("/places/:place_id", middleware.isAuthenticated, placesController.showPlace);
+app.get("/places/edit/:place_id", middleware.isAuthenticated, placesController.editPlace);
+app.get("/places/delete/:place_id", middleware.isAuthenticated, placesController.showDeletePlace);
+app.delete("/places/delete/:place_id", middleware.isAuthenticated, placesController.deletePlace);
 //Test routes to be deleted
 app.get("/test", (req, res) => {
     res.render("test.ejs");
