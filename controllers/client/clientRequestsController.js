@@ -25,9 +25,55 @@ const controllers = {
         const dataObject = {
             credentials: process.env.BING_API,
             planned: placesPlanned,
-            visited: placesVisited
+            visited: placesVisited,
+            style: {
+                "version": "1.*",
+                "settings": {
+                  "landColor": "#FFF9F6D8"
+                },
+                "elements": {
+                  "baseMapElement": {
+                    "labelVisible": false
+                  },
+                  "area": {
+                    "visible": false
+                  },
+                  "water": {
+                    "fillColor": "#8DCFD0"
+                  }
+                }
+              }
         }
         res.json(dataObject);
-    }
+    },
+    getOnePlaceData: async (req, res) => {
+		let placeObject = null;
+      	try {
+        	placeObject = await placeModel.findById(req.params._id);
+      	} catch(err) {
+        	console.log(err);
+        	res.send("failed to create user");
+        	return;
+      	}
+		const credentials = process.env.BING_API;
+		const style = {
+			"version": "1.*",
+			"settings": {
+			  "landColor": "#FFF9F6D8"
+			},
+			"elements": {
+			  "baseMapElement": {
+				"labelVisible": false
+			  },
+			  "area": {
+				"visible": false
+			  },
+			  "water": {
+				"fillColor": "#8DCFD0"
+			  }
+			}
+		  }
+		res.json({placeObject, credentials, style});
+	}
 }
 module.exports = controllers;

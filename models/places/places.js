@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const placeSchema = new mongoose.Schema({
     country: mongoose.ObjectId,
     countryName: String,
+    countryBbox: Array,
     locality: String,
     landmark: String,
     coordinates: Array,

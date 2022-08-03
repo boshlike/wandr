@@ -41,6 +41,7 @@ const controllers = {
         const place = {
             country: countryId,
             countryName: countryObject.name,
+            countryBbox: countryObject.bbox,
             locality: validatedResults.locality,
             landmark: validatedResults.landmark,
             coordinates: validatedResults.center.split(","),
