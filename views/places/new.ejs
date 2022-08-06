@@ -5,11 +5,15 @@
 <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetSuggestion' async defer></script>
 <div class="hero-body">
     <div class="container">
-      <label class="label">Search</label>
+      <!-- <label class="label">Search</label>
       <div class="control" id="searchBoxContainer">
         <input class="input" type="text" placeholder="Text input" id="searchBox">
-      </div> <br>
+      </div> <br> -->
       <form action="/places/create" method="post" class="field" id="add-item">
+        <label class="label">Search</label>
+        <div class="control" id="searchBoxContainer">
+          <input class="input" type="text" placeholder="Search a place" id="searchBox" name="searchString">
+        </div> <br>
             <input class="input" type="hidden" name="country" id="country-name">
             <input class="input" type="hidden" name="countryCode" id="country-code">
             <input class="input" type="hidden" name="locality" id="locality-name">

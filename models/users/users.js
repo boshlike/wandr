@@ -22,10 +22,12 @@ const usersSchema = new mongoose.Schema({
         contentType: String
     },
     visited: {
-        type: Array
+        type: [mongoose.ObjectId],
+        ref: "Place"
     },
     planned: {
-        type: Array
+        type: [mongoose.ObjectId],
+        ref: "Place"
     }
 });
 

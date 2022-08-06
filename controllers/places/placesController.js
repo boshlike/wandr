@@ -38,10 +38,12 @@ const controllers = {
             }
         }
         // Construct the object for the Place and add to database
+        console.log(req.body)
         const place = {
             country: countryId,
             countryName: countryObject.name,
             countryBbox: countryObject.bbox,
+            searchString: validatedResults.searchString,
             locality: validatedResults.locality,
             landmark: validatedResults.landmark,
             coordinates: validatedResults.center.split(","),
@@ -82,16 +84,13 @@ const controllers = {
     deletePlace: async (req, res) => {
         if (req.body.yes) {
             try {
-                const something = await userModel.findOne({
-                    email: req.session.user
-                  }, 
-                  {
+                await userModel.updateOne({
+                    email: req.session.user,
                     $pullAll: {
-                      visited: [req.params.place_id],
-                      planned: [req.params.place_id]
-                    },
+                        planned: [{_id: req.params.place_id}]
+                    }
                   });
-                // await placeModel.deleteOne({_id: req.params.place_id});  
+                await placeModel.deleteOne({_id: req.params.place_id});  
             } catch(err) {
                 res.send("failed to delete");
                 console.log(err);
