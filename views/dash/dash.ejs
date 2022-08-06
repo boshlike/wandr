@@ -9,19 +9,19 @@
         <div id="my-map"></div>
       </div>
       <div class="is-flex is-justify-content-center">
-        <nav class="panel mt-3">
+        <nav class="panel mt-3" id="panel-block">
           <p class="panel-tabs">
             <a class="is-active">All</a>
             <a>Visited</a>
             <a>Planned</a>
           </p>
           <% visited.forEach(element => { %>
-            <a class="panel-block is-active" href="/places/<%= element[0]._id %> ">
+            <a class="panel-block is-active visited" href="/places/<%= element[0]._id %>">
               <%= element[1].name %>
             </a>
           <% }) %>
           <% planned.forEach(element => { %>
-            <a class="panel-block is-active" href="/places/<%= element[0]._id %> ">
+            <a class="panel-block is-active planned" href="/places/<%= element[0]._id %>">
               <%= element[1].name %>
             </a>
           <% }) %>
