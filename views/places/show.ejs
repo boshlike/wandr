@@ -7,7 +7,9 @@
     <div class="container">
         <div class="columns">
             <div class="column is-one-third">
-                <div id="my-mini-map"></div>
+                <div style="height: 40vh;">
+                    <div id="my-mini-map"></div>
+                </div>
             </div>
             <div class="column is-flex is-flex-direction-column">
                 <table class="table">
@@ -28,16 +30,42 @@
                             <th>Status</th>
                             <td><%= visitedPlanned.charAt(0).toUpperCase() + visitedPlanned.slice(1) %></td>
                         </tr>
-                        <tr>
-                            <th>Notes</th>
+                        <% if (visitedPlanned === "visited") { %>
+                            <tr>
+                                <th>Dates</th>
+                                <td><%= `${dateFrom} to ${dateTo}` %></td>
+                            </tr>
+                            <tr>
+                                <th>Rating</th>
+                                <td><%= rating %></td>
+                            </tr>
+                            <tr>
+                                <th>Notes</th>
+                                <td><%= notes %></td>
+                            </tr>
+                        <% } else { %>
+                            <tr>
+                                <th>Notes</th>
                             <td><%= notes %></td>
-                        </tr>
+                        </tr> 
+                        <% } %> 
                     </tbody>
                 </table>
                 <div>
                     <a class="button" href="/places/edit/<%= _id %> ">Edit</a>
-                    <a class="button" href="/places/delete/<%= _id %> ">Delete</a> 
+                    <a class="button" href="/places/delete/<%= _id %> ">Delete</a>
+                    <a class="button" href="/users/home">Back</a>  
                 </div>
+                <% if (visitedPlanned === "planned") { %>
+                    <div
+                      data-skyscanner-widget="SearchWidget"
+                      data-locale="en-GB"
+                      data-market="SG"
+                      data-currency="SGD"
+                      data-destination-name="India"
+                    ></div>
+                    <script src="https://widgets.skyscanner.net/widget-server/js/loader.js" async></script>
+                <% } %>
             </div>
         </div>
     </div>

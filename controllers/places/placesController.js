@@ -73,7 +73,8 @@ const controllers = {
     },
     showPlace: async (req, res) => {
         const idString = req.params.place_id;
-        const place = await placeModel.findById(idString);
+        const place = await placeModel.findById(idString, "countryName locality landmark visitedPlanned dateFrom dateTo rating notes");
+        console.log(place)
         res.render("places/show.ejs", place);
     },
     showEditPlace: async (req, res) => {
@@ -85,6 +86,7 @@ const controllers = {
             console.log(err);
             return;
         }
+        console.log(place)
         res.render("places/edit.ejs", {place});
     },
     editPlace: async (req, res) => {

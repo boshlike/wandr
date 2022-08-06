@@ -79,7 +79,7 @@ const controller = {
             const countryObject = await countryModel.findById(placeObject.country);
             return [placeObject, countryObject];
         }));
-        res.render("dash/indexCountry.ejs", {planned: placesPlanned, visited: placesVisited});
+        res.render("dash/dash.ejs", {planned: placesPlanned, visited: placesVisited});
     },
     showProfile: async (req, res) => {
         const userProfile = await userModel.findOne({email: req.session.user});
