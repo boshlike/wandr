@@ -11,7 +11,6 @@ const toggleVisitedPlanned = async () => {
     document.querySelector("#disable-selection").setAttribute("disabled", "true");
     // Get the form HTML from the server and store in an element
     const dataToFetch = document.querySelector("#visited-planned").value;
-    console.log(dataToFetch)
     const formData = await fetchData(`${location.origin}/fetchformdata/${dataToFetch}`);
     const div = document.querySelector("#form-items");
     div.innerHTML = formData;

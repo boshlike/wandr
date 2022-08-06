@@ -38,7 +38,6 @@ const controllers = {
             }
         }
         // Construct the object for the Place and add to database
-        console.log(req.body)
         const place = {
             country: countryId,
             countryName: countryObject.name,
@@ -49,7 +48,10 @@ const controllers = {
             coordinates: validatedResults.center.split(","),
             createdBy: userId,
             visitedPlanned: validatedResults.visitedPlanned,
-            notes: validatedResults.notes
+            notes: validatedResults.notes,
+            dateFrom: validatedResults.dateFrom,
+            dateTo: validatedResults.dateTo,
+            rating: validatedResults.rating,
         }
         try {
             const object = await placeModel.create(place);
@@ -74,8 +76,32 @@ const controllers = {
         const place = await placeModel.findById(idString);
         res.render("places/show.ejs", place);
     },
+    showEditPlace: async (req, res) => {
+        let place = null;
+        try {
+            place = await placeModel.findOne({_id: req.params.place_id});
+        } catch(err) {
+            res.send("couldn't find place");
+            console.log(err);
+            return;
+        }
+        res.render("places/edit.ejs", {place});
+    },
     editPlace: async (req, res) => {
-        res.send("edit page");
+        console.log(req.body, req.params.place_id);
+        try {
+            const place = await placeModel.findById(req.params.place_id);
+            const keys = Object.keys(req.body);
+            keys.forEach(key => {
+                place[key] = req.body[key];
+            });
+            await place.save();
+            res.redirect(`/places/${place._id}`);
+        } catch(err) {
+            res.send("failed to update");
+            console.log(err);
+            return;
+        }
     },
     showDeletePlace: (req, res) => {
         const id = req.params.place_id;
@@ -87,7 +113,8 @@ const controllers = {
                 await userModel.updateOne({
                     email: req.session.user,
                     $pullAll: {
-                        planned: [{_id: req.params.place_id}]
+                        planned: [{_id: req.params.place_id}],
+                        visited: [{_id: req.params.place_id}]
                     }
                   });
                 await placeModel.deleteOne({_id: req.params.place_id});  

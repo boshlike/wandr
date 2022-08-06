@@ -12,7 +12,10 @@ const placeSchema = new mongoose.Schema({
     coordinates: Array,
     createdBy: mongoose.ObjectId,
     visitedPlanned: String,
-    notes: String
+    notes: String,
+    dateFrom: String,
+    dateTo: String,
+    rating: Number
 });
 
 const Place = mongoose.model("Place", placeSchema);
