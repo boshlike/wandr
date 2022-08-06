@@ -11,13 +11,14 @@ const controllers = {
     createPlace: async (req, res) => {
         // TODO validations
         const validatedResults = req.body;
-        // Check if the country already exists in the database, if not, get geolocation data and store as a country
         const country = validatedResults.countryCode;
         let countryObject = await countryModel.findOne({countryCode: `${country}`});
         const userObject = await userModel.findOne({email: req.session.user});
+        const placeObject = await placeModel.findOne({entityId: validatedResults.entityId});
         const userId = userObject._id;
         let countryId = countryObject ? countryObject._id : null;
-        let placeId = null;
+        let placeId = placeObject ? placeObject._id : null;
+        // Check if the country already exists in the database, if not, get geolocation data and store as a country
         if (!countryObject) {
             const url = `http://dev.virtualearth.net/REST/v1/Locations?countryRegion=${country}&key=${process.env.BING_API}`;
             const data = await helpers.fetchData(url);
@@ -37,36 +38,54 @@ const controllers = {
                 return;
             }
         }
-        // Construct the object for the Place and add to database
-        const place = {
-            country: countryId,
-            countryName: countryObject.name,
-            countryBbox: countryObject.bbox,
-            searchString: validatedResults.searchString,
-            locality: validatedResults.locality,
-            landmark: validatedResults.landmark,
-            coordinates: validatedResults.center.split(","),
-            createdBy: userId,
-            visitedPlanned: validatedResults.visitedPlanned,
+        // Check if the place already exists in the database based on the unique identifier
+        if (!placeObject) {
+        // If so, create the place
+            const place = {
+                country: countryId,
+                countryName: countryObject.name,
+                countryBbox: countryObject.bbox,
+                countryCoord: countryObject.coordinates,
+                searchString: validatedResults.searchString,
+                entityId: validatedResults.entityId,
+                coordinates: validatedResults.center.split(","),
+                rating: validatedResults.visitedPlanned === "visited" ? {rating: validatedResults.rating, user: userId} : null,
+            }
+            try {
+                const object = await placeModel.create(place);
+                placeId = object._id;
+            } catch(err) {
+                console.log(err);
+                res.send("failed to create country");
+                return;
+            }
+        } else {
+            // Otherwise update the place if there has been a new rating
+            if (validatedResults.validatedResults.visitedPlanned === "visited") {
+                try {
+                    const rating = {userId: userId, rating: validatedResults.rating}
+                    placeObject.ratings.push(rating);
+                    placeObject.save();
+                } catch(err) {
+                    console.log(err);
+                    res.send("failed to create country");
+                    return;
+                }
+            }
+        }
+        // Link the place to the user that entered it
+        const userNotesOnPlace = {
+            place_id: placeId,
             notes: validatedResults.notes,
             dateFrom: validatedResults.dateFrom,
             dateTo: validatedResults.dateTo,
-            rating: validatedResults.rating,
+            rating: validatedResults.rating
         }
-        try {
-            const object = await placeModel.create(place);
-            placeId = object._id;
-        } catch(err) {
-            console.log(err);
-            res.send("failed to create country");
-            return;
-        }
-        // Link the place to the user that entered it
         if (validatedResults.visitedPlanned === "visited") {
-            userObject.visited.push(placeId);
+            userObject.visited.push(userNotesOnPlace);
             userObject.save();
         } else {
-           userObject.planned.push(placeId);
+           userObject.planned.push(userNotesOnPlace);
            userObject.save();
         }
         res.redirect("/users/home");

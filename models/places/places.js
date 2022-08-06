@@ -5,17 +5,15 @@ const placeSchema = new mongoose.Schema({
         ref: "Country"
     },
     countryName: String,
+    countryCoord: Array,
     countryBbox: Array,
     searchString: String,
-    locality: String,
-    landmark: String,
+    entityId: String,
     coordinates: Array,
-    createdBy: mongoose.ObjectId,
-    visitedPlanned: String,
-    notes: String,
-    dateFrom: String,
-    dateTo: String,
-    rating: Number
+    ratings: [{
+        userId: mongoose.ObjectId,
+        rating: Number
+    }]
 });
 
 const Place = mongoose.model("Place", placeSchema);

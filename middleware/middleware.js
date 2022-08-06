@@ -12,6 +12,9 @@ const middleware = {
             res.locals.authUser = req.session.user;
         }  
         next();
+    },
+    shareData: (req, res, next) => {
+        
     }
 }
 module.exports = middleware;

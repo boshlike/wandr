@@ -9,7 +9,7 @@ const db = require("./database/wandr_db_connect");
 const usersController = require("./controllers/users/usersController");
 const clientRequestController = require("./controllers/client/clientRequestsController");
 const placesController = require("./controllers/places/placesController");
-const middleware = require("./middleware/auth_middleware");
+const middleware = require("./middleware/middleware");
 // Create app and port
 const app = express();
 const port = 3000;

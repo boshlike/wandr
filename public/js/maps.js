@@ -18,12 +18,9 @@ async function GetSuggestion() {
 const selectPlace = (result) => {
     console.log(result)
     document.querySelector("#country-name").value = result.address.countryRegion;
+    document.querySelector("#entity-id").value = result.entityId;
     document.querySelector("#country-code").value = result.address.countryRegionISO2;
-    document.querySelector("#locality-name").value = result.address.locality;
     document.querySelector("#center").value = [result.bestView.center.latitude, result.bestView.center.longitude];
-    if (result.entityType === "Place") {
-        document.querySelector("#landmark-name").value = result.title;
-    }
 }
 const fetchObject = async (url) => {
     const response = await fetch(url)
@@ -33,9 +30,8 @@ const fetchObject = async (url) => {
 let dashMap = null;
 async function GetMap() {
     const dataObject = await fetchObject(`${location.origin}/fetchmapdata`);
-    const countryPlannedCoords = dataObject.planned.map(place => place[1].coordinates);
-    const countryVisitedCoords = dataObject.visited.map(place => place[1].coordinates);
-    const placesPlannedPins = dataObject.planned.map(place => place[0].coordinates);
+    const countryPlannedCoords = dataObject.planned.map(place => place.countryCoord);
+    const countryVisitedCoords = dataObject.visited.map(place => place.countryCoord);
     const locationTopLeft = new Microsoft.Maps.Location(65, 180);
     const locationBotRight = new Microsoft.Maps.Location(-50, -180);
     const map = new Microsoft.Maps.Map('#my-map', {

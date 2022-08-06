@@ -21,14 +21,26 @@ const usersSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
-    visited: {
-        type: [mongoose.ObjectId],
-        ref: "Place"
-    },
-    planned: {
-        type: [mongoose.ObjectId],
-        ref: "Place"
-    }
+    visited: [{
+        place_id: {
+            type: mongoose.ObjectId,
+            ref: "Place"
+        },
+        notes: String,
+        dateFrom: String,
+        dateTo: String,
+        rating: Number
+    }],
+    planned: [{
+        place_id: {
+            type: mongoose.ObjectId,
+            ref: "Place"
+        },
+        notes: String,
+        dateFrom: String,
+        dateTo: String,
+        rating: Number
+    }]
 });
 
 const UserModel = mongoose.model("User", usersSchema);
