@@ -30,6 +30,7 @@ const fetchObject = async (url) => {
     const data = await response.json()
     return data;
 }
+let dashMap = null;
 async function GetMap() {
     const dataObject = await fetchObject(`${location.origin}/fetchmapdata`);
     const countryPlannedCoords = dataObject.planned.map(place => place[1].coordinates);
@@ -51,16 +52,22 @@ async function GetMap() {
         customMapStyle: dataObject.style,
         showScalebar: false
     });
+    // Add the pins to a pin layer of the map
+    const layer = new Microsoft.Maps.Layer("pin");
     countryPlannedCoords.forEach(coord => {
-        map.entities.push(createPin(coord, "red"));
+        layer.add(createPin(coord, "red", "planned"));
     });
     countryVisitedCoords.forEach(coord => {
-        map.entities.push(createPin(coord, "blue"));
+        layer.add(createPin(coord, "blue", "visited"));
     });
+    map.layers.insert(layer);
+    // Access map object outside of function scope
+    dashMap = map;
 }
-const createPin = (arr, color) => {
+const createPin = (arr, color, visitedPlanned) => {
     const location = new Microsoft.Maps.Location(arr[0], arr[1]);
     const pin = new Microsoft.Maps.Pushpin(location, {color: color});
+    pin.metadata = visitedPlanned;
     return pin;
 }
 async function GetMiniMap() {
@@ -83,4 +90,16 @@ async function GetMiniMap() {
         showScalebar: false
     });
     map.entities.push(createPin(dataObject.placeObject.coordinates, color));
+}
+// Function that hides and shows pins depending on if planned or visited is clicked
+function hideShowPins (toShow) {
+    const pins = dashMap.layers[0].getPrimitives();
+    const pinsLen = pins.length;
+    for (let i = 0; i < pinsLen; i++) {
+        if (pins[i].metadata === toShow || toShow === "all") {
+            pins[i].setOptions({visible: true});
+        } else {
+           pins[i].setOptions({visible: false}); 
+        }
+    }
 }

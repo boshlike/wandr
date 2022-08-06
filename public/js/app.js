@@ -39,7 +39,7 @@ document.querySelector("#panel-block").onclick = (event) => {
     // Add is active to tab clicked
     event.target.classList.add("is-active");
     const targetName =  event.target.text;
-    console.log(targetName)   
+    hideShowPins(targetName.toLowerCase());
     // Add is-active to the relevant visited, planned or both
     const panelBlock = document.getElementsByClassName("panel-block");
     for (let i = 0, len = panelBlock.length; i < len; i++) {
