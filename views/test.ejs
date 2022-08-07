@@ -1,36 +1,46 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-    <meta charset="utf-8" />
-  </head>
-  <body>
-    <label class="label">Date from</label>
-    <div class="control">
-      <input class="input" type="date" name="dateFrom" />
-    </div>
-    <label class="label">Date to</label>
-    <div class="control">
-      <input class="input" type="date" name="dateTo" />
-    </div>
-    <label class="label">Rating</label>
-    <div class="control">
-      <input class="text" type="number" min="1" max="5" name="rating" />
-    </div>
-    <label class="label">Notes</label>
-    <div class="control">
-      <input class="textarea" type="text" name="notes" />
-    </div>
-    <label class="label">Add images</label>
-    <div class="file">
-      <label class="file-label">
-        <input class="file-input" type="file" name="resume" />
-        <span class="file-cta">
-          <span class="file-icon">
-            <i class="fas fa-upload"></i>
-          </span>
-        </span>
-      </label>
-    </div>
-  </body>
-</html>
+<table class="table">
+  <tbody>
+      <tr>
+          <th>Place</th>
+          <td><%= userPlace.place %></td>
+      </tr>
+      <tr>
+          <th>Status</th>
+          <td><%= userPlace.visitedPlanned.visitedPlanned.charAt(0).toUpperCase() + visitedPlanned.slice(1) %></td>
+      </tr>
+      <% if (userPlace.visitedPlanned.visitedPlanned === "visited") { %>
+          <tr>
+              <th>Dates</th>
+              <td><%= `${userPlace.visitedPlanned.dateFrom} to ${userPlace.visitedPlanned.dateTo}` %></td>
+          </tr>
+          <tr>
+              <th>Rating</th>
+              <td><%= userPlace.visitedPlanned.rating %></td>
+          </tr>
+          <tr>
+              <th>Notes</th>
+              <td><%= userPlace.visitedPlanned.notes %></td>
+          </tr>
+      <% } else { %>
+          <tr>
+              <th>Notes</th>
+          <td><%= userPlace.visitedPlanned.notes %></td>
+      </tr> 
+      <% } %> 
+  </tbody>
+</table>
+<div>
+  <a class="button" href="/places/edit/<%= _id %> ">Edit</a>
+  <a class="button" href="/places/delete/<%= _id %> ">Delete</a>
+  <a class="button" href="/users/home">Back</a>  
+</div>
+<% if (userPlace.visitedPlanned.visitedPlanned === "planned") { %>
+  <div
+    data-skyscanner-widget="SearchWidget"
+    data-locale="en-GB"
+    data-market="SG"
+    data-currency="SGD"
+    data-destination-name="India"
+  ></div>
+  <script src="https://widgets.skyscanner.net/widget-server/js/loader.js" async></script>
+<% } %>

@@ -15,16 +15,8 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <th>Country</th>
-                            <td><%= countryName %></td>
-                        </tr>
-                        <tr>
-                            <th>Locality</th>
-                            <td><%= locality %></td>
-                        </tr>
-                        <tr>
-                            <th>Landmark</th>
-                            <td><%= landmark %></td>
+                            <th>Place</th>
+                            <td><%= searchString %></td>
                         </tr>
                         <tr>
                             <th>Status</th>
@@ -32,8 +24,12 @@
                         </tr>
                         <% if (visitedPlanned === "visited") { %>
                             <tr>
-                                <th>Dates</th>
-                                <td><%= `${dateFrom} to ${dateTo}` %></td>
+                                <th>Date From</th>
+                                <td><%= dateFrom %></td>
+                            </tr>
+                            <tr>
+                                <th>Date To</th>
+                                <td><%= dateTo %></td>
                             </tr>
                             <tr>
                                 <th>Rating</th>
@@ -50,13 +46,13 @@
                         </tr> 
                         <% } %> 
                     </tbody>
-                </table>
-                <div>
-                    <a class="button" href="/places/edit/<%= _id %> ">Edit</a>
-                    <a class="button" href="/places/delete/<%= _id %> ">Delete</a>
+                  </table>
+                  <div>
+                    <a class="button" href="/places/edit/<%= place_id %> ">Edit</a>
+                    <a class="button" href="/places/delete/<%= place_id %> ">Delete</a>
                     <a class="button" href="/users/home">Back</a>  
-                </div>
-                <% if (visitedPlanned === "planned") { %>
+                  </div>
+                  <% if (visitedPlanned === "planned") { %>
                     <div
                       data-skyscanner-widget="SearchWidget"
                       data-locale="en-GB"
@@ -65,7 +61,7 @@
                       data-destination-name="India"
                     ></div>
                     <script src="https://widgets.skyscanner.net/widget-server/js/loader.js" async></script>
-                <% } %>
+                  <% } %>
             </div>
         </div>
     </div>

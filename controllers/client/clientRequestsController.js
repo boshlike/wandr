@@ -12,18 +12,13 @@ const controllers = {
         // Get the user
         const userObject = await userModel.findOne({email: req.session.user});
         // Get the list of places they have planned or visited and extract the coordinates
-        const placesPlanned = await Promise.all(userObject.planned.map(async (place) => {
-            const placeObject = await placeModel.findById(place.place_id);
-            return placeObject;
-        }));
-        const placesVisited = await Promise.all(userObject.visited.map(async (place) => {
+        const places = await Promise.all(userObject.visitedPlanned.map(async (place) => {
             const placeObject = await placeModel.findById(place.place_id);
             return placeObject;
         }));
         const dataObject = {
             credentials: process.env.BING_API,
-            planned: placesPlanned,
-            visited: placesVisited,
+            visitedPlanned: places,
             style: {
                 "version": "1.*",
                 "settings": {

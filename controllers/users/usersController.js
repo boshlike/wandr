@@ -69,15 +69,11 @@ const controller = {
         // Get the user
         const userObject = await userModel.findOne({email: req.session.user});
         // Get the list of places they have planned or visited and extract the coordinates
-        const placesPlanned = await Promise.all(userObject.planned.map(async (place) => {
+        const places = await Promise.all(userObject.visitedPlanned.map(async (place) => {
             const placeObject = await placeModel.findById(place.place_id);
             return placeObject;
         }));
-        const placesVisited = await Promise.all(userObject.visited.map(async (place) => {
-            const placeObject = await placeModel.findById(place.place_id);
-            return placeObject;
-        }));
-        res.render("dash/dash.ejs", {places: [...placesPlanned, ...placesVisited]});
+        res.render("dash/dash.ejs", {places});
     },
     showProfile: async (req, res) => {
         const userProfile = await userModel.findOne({email: req.session.user});

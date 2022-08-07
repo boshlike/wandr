@@ -48,8 +48,10 @@ const controllers = {
                 countryCoord: countryObject.coordinates,
                 searchString: validatedResults.searchString,
                 entityId: validatedResults.entityId,
-                coordinates: validatedResults.center.split(","),
-                rating: validatedResults.visitedPlanned === "visited" ? {rating: validatedResults.rating, user: userId} : null,
+                coordinates: validatedResults.center.split(",")
+            }
+            if (validatedResults.visitedPlanned === "visited") {
+                place.ratings = [{userId: userId, rating: parseInt(validatedResults.rating)}]
             }
             try {
                 const object = await placeModel.create(place);
@@ -61,9 +63,9 @@ const controllers = {
             }
         } else {
             // Otherwise update the place if there has been a new rating
-            if (validatedResults.validatedResults.visitedPlanned === "visited") {
+            if (validatedResults.visitedPlanned === "visited") {
                 try {
-                    const rating = {userId: userId, rating: validatedResults.rating}
+                    const rating = {userId: userId, rating: parseInt(validatedResults.rating)};
                     placeObject.ratings.push(rating);
                     placeObject.save();
                 } catch(err) {
@@ -77,24 +79,50 @@ const controllers = {
         const userNotesOnPlace = {
             place_id: placeId,
             notes: validatedResults.notes,
+            visitedPlanned: validatedResults.visitedPlanned,
             dateFrom: validatedResults.dateFrom,
             dateTo: validatedResults.dateTo,
             rating: validatedResults.rating
         }
-        if (validatedResults.visitedPlanned === "visited") {
-            userObject.visited.push(userNotesOnPlace);
-            userObject.save();
-        } else {
-           userObject.planned.push(userNotesOnPlace);
-           userObject.save();
-        }
+        userObject.visitedPlanned.push(userNotesOnPlace);
+        userObject.save();
         res.redirect("/users/home");
     },
-    showPlace: async (req, res) => {
-        const idString = req.params.place_id;
-        const place = await placeModel.findById(idString, "countryName locality landmark visitedPlanned dateFrom dateTo rating notes");
-        console.log(place)
-        res.render("places/show.ejs", place);
+    showUserPlace: async (req, res) => {
+        const id = ObjectID(req.params.place_id);
+        const user = req.session.user.toLowerCase();
+        let userPlace = null;
+        try {
+            userPlace = await userModel.aggregate([
+                {$match: {email: user}},
+                {$unwind: "$visitedPlanned"},
+                {$match: {"visitedPlanned.place_id": id}},
+                {$lookup: {
+                    from: "places",
+                    localField: "visitedPlanned.place_id",
+                    foreignField: "_id",
+                    as: "place"
+                }},
+                {$unwind: "$place"},
+                {$project: {
+                    _id: 0, 
+                    "visitedPlanned.visitedPlanned": 1,
+                    "visitedPlanned.place_id": 1,
+                    "visitedPlanned.notes": 1,
+                    "visitedPlanned.dateFrom": 1,
+                    "visitedPlanned.dateTo": 1,
+                    "visitedPlanned.rating": 1,   
+                    "place.searchString": 1
+                }},
+                { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
+            ]);
+            console.log(userPlace)
+        } catch(err) {
+            console.log(err);
+            res.send("failed to find country");
+            return;
+        }
+        res.render("places/showUserPlace.ejs", userPlace[0]);
     },
     showEditPlace: async (req, res) => {
         let place = null;

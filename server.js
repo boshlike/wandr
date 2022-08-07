@@ -45,7 +45,7 @@ app.get("/fetchmapdata/places/:_id", clientRequestController.getOnePlaceData);
 //Places routes
 app.get("/places/create", middleware.isAuthenticated, placesController.showCreateForm);
 app.post("/places/create", middleware.isAuthenticated, placesController.createPlace);
-app.get("/places/:place_id", middleware.isAuthenticated, placesController.showPlace);
+app.get("/places/:place_id", middleware.isAuthenticated, placesController.showUserPlace);
 app.get("/places/edit/:place_id", middleware.isAuthenticated, placesController.showEditPlace);
 app.patch("/places/edit/:place_id", middleware.isAuthenticated, placesController.editPlace);
 app.get("/places/delete/:place_id", middleware.isAuthenticated, placesController.showDeletePlace);

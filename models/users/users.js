@@ -21,21 +21,12 @@ const usersSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
-    visited: [{
+    visitedPlanned: [{
         place_id: {
             type: mongoose.ObjectId,
             ref: "Place"
         },
-        notes: String,
-        dateFrom: String,
-        dateTo: String,
-        rating: Number
-    }],
-    planned: [{
-        place_id: {
-            type: mongoose.ObjectId,
-            ref: "Place"
-        },
+        visitedPlanned: String,
         notes: String,
         dateFrom: String,
         dateTo: String,

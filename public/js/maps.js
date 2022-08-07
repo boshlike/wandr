@@ -30,8 +30,7 @@ const fetchObject = async (url) => {
 let dashMap = null;
 async function GetMap() {
     const dataObject = await fetchObject(`${location.origin}/fetchmapdata`);
-    const countryPlannedCoords = dataObject.planned.map(place => place.countryCoord);
-    const countryVisitedCoords = dataObject.visited.map(place => place.countryCoord);
+    const userCountries = dataObject.visitedPlanned.map(place => [place.countryCoord, place.visitedPlanned]);
     const locationTopLeft = new Microsoft.Maps.Location(65, 180);
     const locationBotRight = new Microsoft.Maps.Location(-50, -180);
     const map = new Microsoft.Maps.Map('#my-map', {
@@ -50,18 +49,16 @@ async function GetMap() {
     });
     // Add the pins to a pin layer of the map
     const layer = new Microsoft.Maps.Layer("pin");
-    countryPlannedCoords.forEach(coord => {
-        layer.add(createPin(coord, "red", "planned"));
-    });
-    countryVisitedCoords.forEach(coord => {
-        layer.add(createPin(coord, "blue", "visited"));
+    userCountries.forEach(country => {
+        layer.add(createPin(country[0], country[1]));
     });
     map.layers.insert(layer);
     // Access map object outside of function scope
     dashMap = map;
 }
-const createPin = (arr, color, visitedPlanned) => {
+const createPin = (arr, visitedPlanned) => {
     const location = new Microsoft.Maps.Location(arr[0], arr[1]);
+    const color = visitedPlanned === "visited" ? "red" : "blue"
     const pin = new Microsoft.Maps.Pushpin(location, {color: color});
     pin.metadata = visitedPlanned;
     return pin;
