@@ -41,15 +41,15 @@ app.get("/users/profile", middleware.isAuthenticated, usersController.showProfil
 //Client side fetch routes
 app.get("/fetchformdata/:data", clientRequestController.getFormData);
 app.get("/fetchmapdata", clientRequestController.getMapsDataObject);
-app.get("/fetchmapdata/places/:_id", clientRequestController.getOnePlaceData);
+app.get("/fetchmapdata/places/user/:_id", clientRequestController.getOnePlaceData);
 //Places routes
 app.get("/places/create", middleware.isAuthenticated, placesController.showCreateForm);
-app.post("/places/create", middleware.isAuthenticated, placesController.createPlace);
-app.get("/places/:place_id", middleware.isAuthenticated, placesController.showUserPlace);
-app.get("/places/edit/:place_id", middleware.isAuthenticated, placesController.showEditPlace);
-app.patch("/places/edit/:place_id", middleware.isAuthenticated, placesController.editPlace);
-app.get("/places/delete/:place_id", middleware.isAuthenticated, placesController.showDeletePlace);
-app.delete("/places/delete/:place_id", middleware.isAuthenticated, placesController.deletePlace);
+app.post("/places/create", middleware.isAuthenticated, placesController.createUserPlace);
+app.get("/places/user/:place_id", middleware.isAuthenticated, placesController.showUserPlace);
+app.get("/places/user/edit/:place_id", middleware.isAuthenticated, placesController.showEditUserPlace);
+app.patch("/places/user/edit/:place_id", middleware.isAuthenticated, placesController.editUserPlace);
+app.get("/places/user/delete/:place_id", middleware.isAuthenticated, placesController.showDeleteUserPlace);
+app.delete("/places/user/delete/:place_id", middleware.isAuthenticated, placesController.deleteUserPlace);
 //Test routes to be deleted
 app.get("/test", (req, res) => {
     res.render("test.ejs");

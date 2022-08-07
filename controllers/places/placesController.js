@@ -1,5 +1,5 @@
 require("dotenv").config();
-var ObjectID = require('mongodb').ObjectID;
+var ObjectId = require('mongodb').ObjectId;
 const countryModel = require("../../models/places/countries");
 const placeModel = require("../../models/places/places");
 const userModel = require("../../models/users/users");
@@ -8,7 +8,7 @@ const controllers = {
     showCreateForm: (req, res) => {
         res.render("places/new.ejs");
     },
-    createPlace: async (req, res) => {
+    createUserPlace: async (req, res) => {
         // TODO validations
         const validatedResults = req.body;
         const country = validatedResults.countryCode;
@@ -89,7 +89,7 @@ const controllers = {
         res.redirect("/users/home");
     },
     showUserPlace: async (req, res) => {
-        const id = ObjectID(req.params.place_id);
+        const id = ObjectId(req.params.place_id);
         const user = req.session.user.toLowerCase();
         let userPlace = null;
         try {
@@ -123,7 +123,7 @@ const controllers = {
         }
         res.render("places/showUserPlace.ejs", userPlace[0]);
     },
-    showEditPlace: async (req, res) => {
+    showEditUserPlace: async (req, res) => {
         let place = null;
         try {
             place = await placeModel.findOne({_id: req.params.place_id});
@@ -135,7 +135,7 @@ const controllers = {
         console.log(place)
         res.render("places/edit.ejs", {place});
     },
-    editPlace: async (req, res) => {
+    editUserPlace: async (req, res) => {
         console.log(req.body, req.params.place_id);
         try {
             const place = await placeModel.findById(req.params.place_id);
@@ -151,21 +151,30 @@ const controllers = {
             return;
         }
     },
-    showDeletePlace: (req, res) => {
+    showDeleteUserPlace: (req, res) => {
         const id = req.params.place_id;
         res.render("places/delete.ejs", {"_id": id});
     },
-    deletePlace: async (req, res) => {
+    deleteUserPlace: async (req, res) => {
+        console.log(req.params.place_id)
+        const id = ObjectId(req.params.place_id)
+        console.log(id)
         if (req.body.yes) {
             try {
-                await userModel.updateOne({
-                    email: req.session.user,
-                    $pullAll: {
-                        planned: [{_id: req.params.place_id}],
-                        visited: [{_id: req.params.place_id}]
+                const userDoc = await userModel.findOneAndUpdate({email: req.session.user}, {$pull: {
+                    visitedPlanned: {
+                        place_id: {
+                            $in: [id]
+                        }
                     }
-                  });
-                await placeModel.deleteOne({_id: req.params.place_id});  
+                }});
+                await placeModel.updateOne({_id: id}, {$pull: {
+                    ratings: {
+                        userId: {
+                            $in: [userDoc._id]
+                        }
+                    }
+                }});
             } catch(err) {
                 res.send("failed to delete");
                 console.log(err);

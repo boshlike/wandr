@@ -93,7 +93,6 @@ const controller = {
             res.send("failed to fetch data");
             return;
         }
-        console.log(places)
         res.render("dash/dash.ejs", {places});
     },
     showProfile: async (req, res) => {

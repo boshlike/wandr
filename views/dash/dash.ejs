@@ -16,8 +16,8 @@
             <a>Planned</a>
           </p>
           <% places.forEach(place => { %>
-            <a class="panel-block is-active <%= place.visitedPlanned %> " href="/places/<%= place.place_id %>">
-              <%= place.countryName %>
+            <a class="panel-block is-active <%= place.visitedPlanned %> " href="/places/user/<%= place.place_id %>">
+              <%= place.searchString %>
             </a>
           <% }) %>
         </nav>
