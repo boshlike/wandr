@@ -2,50 +2,67 @@ require("dotenv").config();
 const formsModels = require("../../models/forms/forms");
 const userModel = require("../../models/users/users");
 const placeModel = require("../../models/places/places");
-const countryModel = require("../../models/places/countries");
 const controllers = {
     getFormData: (req, res) => {
         const data = req.params.data;
         res.json(formsModels[data]);
     },
     getMapsDataObject: async (req, res) => {
-        // Get the user
-        const userObject = await userModel.findOne({email: req.session.user});
-        // Get the list of places they have planned or visited and extract the coordinates
-        const places = await Promise.all(userObject.visitedPlanned.map(async (place) => {
-            const placeObject = await placeModel.findById(place.place_id);
-            return placeObject;
-        }));
-        const dataObject = {
-            credentials: process.env.BING_API,
-            visitedPlanned: places,
-            style: {
-                "version": "1.*",
-                "settings": {
-                  "landColor": "#FFF9F6D8"
-                },
-                "elements": {
-                  "baseMapElement": {
-                    "labelVisible": false
-                  },
-                  "area": {
-                    "visible": false
-                  },
-                  "water": {
-                    "fillColor": "#8DCFD0"
-                  }
-                }
-              }
+      const user = req.session.user.toLowerCase();
+      let userDataObject = null;
+      try {
+        userDataObject = await userModel.aggregate([
+              {$match: {email: user}},
+              {$unwind: "$visitedPlanned"},
+              {$lookup: {
+                  from: "places",
+                  localField: "visitedPlanned.place_id",
+                  foreignField: "_id",
+                  as: "place"
+              }},
+              {$unwind: "$place"},
+              {$project: {
+                  _id: 0, 
+                  "visitedPlanned.visitedPlanned": 1,
+                  "place.countryCoord": 1
+              }},
+              { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
+          ]);
+      } catch(err) {
+          console.log(err);
+          res.send("failed to fetch data");
+          return;
+      }
+      const dataObject ={
+        userData: userDataObject,
+        credentials: process.env.BING_API,
+        style: {
+          "version": "1.*",
+          "settings": {
+            "landColor": "#FFF9F6D8"
+          },
+          "elements": {
+            "baseMapElement": {
+              "labelVisible": false
+            },
+            "area": {
+              "visible": false
+            },
+            "water": {
+              "fillColor": "#8DCFD0"
+            }
+          }
         }
-        res.json(dataObject);
+      }
+      res.json(dataObject);
     },
     getOnePlaceData: async (req, res) => {
 		let placeObject = null;
       	try {
-        	placeObject = await placeModel.findById(req.params._id);
+        	placeObject = await placeModel.findById(req.params._id,"countryBbox coordinates visitedPlanned").lean();
       	} catch(err) {
         	console.log(err);
-        	res.send("failed to create user");
+        	res.send("failed to get one place");
         	return;
       	}
 		const credentials = process.env.BING_API;

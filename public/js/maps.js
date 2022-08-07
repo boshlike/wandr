@@ -30,7 +30,7 @@ const fetchObject = async (url) => {
 let dashMap = null;
 async function GetMap() {
     const dataObject = await fetchObject(`${location.origin}/fetchmapdata`);
-    const userCountries = dataObject.visitedPlanned.map(place => [place.countryCoord, place.visitedPlanned]);
+    const userCountries = dataObject.userData.map(place => [place.countryCoord, place.visitedPlanned]);
     const locationTopLeft = new Microsoft.Maps.Location(65, 180);
     const locationBotRight = new Microsoft.Maps.Location(-50, -180);
     const map = new Microsoft.Maps.Map('#my-map', {

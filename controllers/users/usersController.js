@@ -66,13 +66,34 @@ const controller = {
         })
     },
     showDashboard: async (req, res) => {
-        // Get the user
-        const userObject = await userModel.findOne({email: req.session.user});
-        // Get the list of places they have planned or visited and extract the coordinates
-        const places = await Promise.all(userObject.visitedPlanned.map(async (place) => {
-            const placeObject = await placeModel.findById(place.place_id);
-            return placeObject;
-        }));
+        const user = req.session.user.toLowerCase();
+        let places = null;
+        try {
+          places = await userModel.aggregate([
+                {$match: {email: user}},
+                {$unwind: "$visitedPlanned"},
+                {$lookup: {
+                    from: "places",
+                    localField: "visitedPlanned.place_id",
+                    foreignField: "_id",
+                    as: "place"
+                }},
+                {$unwind: "$place"},
+                {$project: {
+                    _id: 0, 
+                    "visitedPlanned.visitedPlanned": 1,
+                    "visitedPlanned.place_id": 1,
+                    "place.countryName": 1,
+                    "place.searchString": 1,
+                }},
+                { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
+            ]);
+        } catch(err) {
+            console.log(err);
+            res.send("failed to fetch data");
+            return;
+        }
+        console.log(places)
         res.render("dash/dash.ejs", {places});
     },
     showProfile: async (req, res) => {

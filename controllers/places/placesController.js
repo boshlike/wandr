@@ -116,7 +116,6 @@ const controllers = {
                 }},
                 { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
             ]);
-            console.log(userPlace)
         } catch(err) {
             console.log(err);
             res.send("failed to find country");
