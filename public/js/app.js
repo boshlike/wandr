@@ -6,14 +6,32 @@ const toggleBurger = () => {
     navMenu.classList.toggle("is-active");
 }
 // Toggle new place form
-const toggleVisitedPlanned = async () => {
+const toggleVisitedPlanned = () => {
     // Make selecting "Select one" disabled
-    document.querySelector("#disable-selection").setAttribute("disabled", "true");
+    try {
+       document.querySelector("#disable-selection").setAttribute("disabled", "true"); 
+    } catch(err) {
+        // Do nothing
+    }
     // Get the form HTML from the server and store in an element
-    const dataToFetch = document.querySelector("#visited-planned").value;
-    const formData = await fetchData(`${location.origin}/fetchformdata/${dataToFetch}`);
-    const div = document.querySelector("#form-items");
-    div.innerHTML = formData;
+    const visitedPlanned = document.querySelector("#visited-planned");
+    const disableElements = document.querySelectorAll(".disable");
+    console.log(visitedPlanned.value)
+    if (visitedPlanned.value === "planned") {
+        // Just set the notes field as enabled and clear the other fields
+        disableElements.forEach((element, index) => {
+            if (index === 0) {
+                element.disabled = false;
+            } else {
+                element.disabled = true;
+                element.value = "";
+            }
+        })
+        return;
+    }
+    disableElements.forEach(element => {
+        element.disabled = false;
+    });
 }
 const fetchData = async (url) => {
     const response = await fetch(url)

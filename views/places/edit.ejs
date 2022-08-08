@@ -12,50 +12,50 @@
             <input type="hidden" name="place_id" value="<%= place_id %>">
           <% if (visitedPlanned === "visited") { %>
           <div class="control select">
-            <select name="visitedPlanned" id="visited-planned" onchange="">
+            <select name="visitedPlanned" id="visited-planned" onchange="toggleVisitedPlanned()">
               <option value="visited" selected>Visited</option>
-              <option value="planned">Visited</option>
+              <option value="planned">Planned</option>
             </select>
-            </div>
+          </div>
+            <label class="label">Notes</label>
+            <div class="control">
+              <input class="textarea disable" type="text" name="notes" value="<%= notes %>"/>
+            </div>   
             <label class="label visit">Date from</label>
             <div class="control visit">
-              <input class="input" type="date" name="dateFrom" value="<%= dateFrom %>"/>
+              <input class="input disable" type="date" name="dateFrom" value="<%= dateFrom %>"/>
             </div>
             <label class="label visit">Date to</label>
             <div class="control visit">
-              <input class="input" type="date" name="dateTo" value="<%= dateTo %>"/>
+              <input class="input disable" type="date" name="dateTo" value="<%= dateTo %>"/>
             </div>
             <label class="label visit">Rating</label>
             <div class="control visit">
-              <input class="text" type="number" min="1" max="5" name="rating" value="<%= rating %>"/>
+              <input class="text disable" type="number" min="1" max="5" name="rating" value="<%= rating %>"/>
             </div>
-            <label class="label">Notes</label>
-            <div class="control">
-              <input class="textarea" type="text" name="notes" value="<%= notes %>"/>
-            </div>   
           <% } else { %>
             <div class="control select">
-              <select name="visitedPlanned" id="visited-planned" onchange="">
+              <select name="visitedPlanned" id="visited-planned" onchange="toggleVisitedPlanned()">
                 <option value="visited">Visited</option>
                 <option value="planned" selected>Planned</option>
               </select>
             </div>
+            <label class="label">Notes</label>
+            <div class="control">
+              <input class="textarea disable" type="text" name="notes" value="<%= notes %>"/>
+            </div>
             <label class="label">Date from</label>
             <div class="control">
-              <input class="input visit" type="date" name="dateFrom" disabled/>
+              <input class="input disable" type="date" name="dateFrom" disabled/>
             </div>
             <label class="label">Date to</label>
             <div class="control">
-              <input class="input visit" type="date" name="dateTo" disabled/>
+              <input class="input disable" type="date" name="dateTo" disabled/>
             </div>
             <label class="label">Rating</label>
             <div class="control">
-              <input class="text visit" type="number" min="1" max="5" name="rating" disabled/>
+              <input class="text disable" type="number" min="1" max="5" name="rating" disabled/>
             </div>
-            <label class="label">Notes</label>
-            <div class="control">
-              <input class="textarea" type="text" name="notes"/>
-            </div>  
           <% } %>      
       </form>  
       <br>

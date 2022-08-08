@@ -43,7 +43,6 @@ app.patch("/users/edit", middleware.isAuthenticated, usersController.editProfile
 app.get("/users/delete", middleware.isAuthenticated, usersController.showDeleteProfile);
 app.delete("/users/delete", middleware.isAuthenticated, usersController.deleteProfile);
 //Client side fetch routes
-app.get("/fetchformdata/:data", clientRequestController.getFormData);
 app.get("/fetchmapdata", clientRequestController.getMapsDataObject);
 app.get("/fetchmapdata/places/user/:_id", clientRequestController.getOnePlaceData);
 //Places routes

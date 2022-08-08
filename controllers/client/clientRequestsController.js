@@ -1,12 +1,7 @@
 require("dotenv").config();
-const formsModels = require("../../models/forms/forms");
 const userModel = require("../../models/users/users");
 const placeModel = require("../../models/places/places");
 const controllers = {
-    getFormData: (req, res) => {
-        const data = req.params.data;
-        res.json(formsModels[data]);
-    },
     getMapsDataObject: async (req, res) => {
       const user = req.session.user.toLowerCase();
       let userDataObject = null;
