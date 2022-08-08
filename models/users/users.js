@@ -17,7 +17,7 @@ const usersSchema = new mongoose.Schema({
     aboutMe: {
         type: String
     },
-    img: {
+    profileImg: {
         data: Buffer,
         contentType: String
     },

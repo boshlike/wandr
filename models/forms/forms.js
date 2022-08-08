@@ -10,7 +10,7 @@ const forms = {
     </div>
     <label class="label">Rating</label>
     <div class="control">
-      <input class="text" type="number" min="1" max="5" name="rating" />
+      <input class="text" type="number" min="1" max="5" value="3" name="rating" />
     </div>
     <label class="label">Notes</label>
     <div class="control">

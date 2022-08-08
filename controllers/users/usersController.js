@@ -90,14 +90,22 @@ const controller = {
             ]);
         } catch(err) {
             console.log(err);
-            res.send("failed to fetch data");
+            res.send("failed to fetch user dashboard");
             return;
         }
         res.render("dash/dash.ejs", {places});
     },
     showProfile: async (req, res) => {
-        const userProfile = await userModel.findOne({email: req.session.user});
-        res.render("users/profile.ejs", {userProfile});
+        let userProfile = null;
+        try {
+            userProfile = await userModel.findOne({email: req.session.user}).lean();
+            console.log(userProfile)
+            res.render("users/profile.ejs", {userProfile});
+        } catch(err) {
+            console.log(err);
+            res.send("failed to fetch user profile");
+            return;
+        }
     },
     logout: async (req, res) => {
         req.session.user = null;
@@ -114,6 +122,28 @@ const controller = {
                 res.redirect("/");
             })
         })
+    },
+    showEditProfile: async (req, res) => {
+        try {
+            const userProfile = await userModel.findOne({email: req.session.user});
+            res.render("users/edit.ejs", {userProfile});
+        } catch(err) {
+            console.log(err);
+            res.send("failed to fetch user profile");
+            return;
+        }
+    },
+    editProfile: async (req, res) => {
+        // TODO validation
+        validatedResults = req.body;
+        try {
+            const userProfile = await userModel.updateOne({email: req.session.user}, validatedResults);
+            res.redirect("/users/profile");
+        } catch(err) {
+            console.log(err);
+            res.send("failed to update profile");
+            return;
+        }
     }
 }
 module.exports = controller;

@@ -124,27 +124,71 @@ const controllers = {
         res.render("places/showUserPlace.ejs", userPlace[0]);
     },
     showEditUserPlace: async (req, res) => {
-        let place = null;
+        const id = ObjectId(req.params.place_id);
+        const user = req.session.user.toLowerCase();
+        let userPlace = null;
         try {
-            place = await placeModel.findOne({_id: req.params.place_id});
+            userPlace = await userModel.aggregate([
+                {$match: {email: user}},
+                {$unwind: "$visitedPlanned"},
+                {$match: {"visitedPlanned.place_id": id}},
+                {$lookup: {
+                    from: "places",
+                    localField: "visitedPlanned.place_id",
+                    foreignField: "_id",
+                    as: "place"
+                }},
+                {$unwind: "$place"},
+                {$project: {
+                    _id: 0, 
+                    "visitedPlanned.visitedPlanned": 1,
+                    "visitedPlanned.place_id": 1,
+                    "visitedPlanned.notes": 1,
+                    "visitedPlanned.dateFrom": 1,
+                    "visitedPlanned.dateTo": 1,
+                    "visitedPlanned.rating": 1,   
+                    "place.searchString": 1
+                }},
+                { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
+            ]);
         } catch(err) {
-            res.send("couldn't find place");
             console.log(err);
+            res.send("failed to find place to edit");
             return;
         }
-        console.log(place)
-        res.render("places/edit.ejs", {place});
+        res.render("places/edit.ejs", userPlace[0]);
     },
     editUserPlace: async (req, res) => {
-        console.log(req.body, req.params.place_id);
+        // TODO validations
+        const validatedResults = req.body;
+        console.log(validatedResults)
+        const user = req.session.user.toLowerCase();
+        const id = ObjectId(req.params.place_id);
         try {
-            const place = await placeModel.findById(req.params.place_id);
-            const keys = Object.keys(req.body);
-            keys.forEach(key => {
-                place[key] = req.body[key];
-            });
-            await place.save();
-            res.redirect(`/places/${place._id}`);
+            await userModel.aggregate([
+                {$match: {email: user}},
+                {$unwind: "$visitedPlanned"},
+                {$match: {"visitedPlanned.place_id": id}},
+                {$lookup: {
+                    from: "places",
+                    localField: "visitedPlanned.place_id",
+                    foreignField: "_id",
+                    as: "place"
+                }},
+                {$unwind: "$place"},
+                {$project: {
+                    _id: 0, 
+                    "visitedPlanned.visitedPlanned": 1,
+                    "visitedPlanned.place_id": 1,
+                    "visitedPlanned.notes": 1,
+                    "visitedPlanned.dateFrom": 1,
+                    "visitedPlanned.dateTo": 1,
+                    "visitedPlanned.rating": 1,   
+                    "place.searchString": 1
+                }},
+                { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
+            ]);
+            res.redirect(`/places/user/${req.params.place_id}`);
         } catch(err) {
             res.send("failed to update");
             console.log(err);

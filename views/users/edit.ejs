@@ -1,0 +1,37 @@
+<%- include("../partials/head.ejs") %> 
+<%- include("../partials/header.ejs") %>
+<!-- Hero content: will be in the middle -->
+<div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column">
+        <form action="/users/edit?_method=PATCH" method="post">
+            <div class="field" id="sign-up">
+                <label class="label">Name</label>
+                <div class="control">
+                    <input class="input" type="text" name="name" value="<%= userProfile.name %>">
+                </div>
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input" type="email" name="email" value="<%= userProfile.email %>">
+                </div>
+                <label class="label">About me</label>
+                <div class="control">
+                    <% if (userProfile.aboutMe) { %>
+                        <input class="textarea" type="text" name="aboutMe" value="<%= userProfile.aboutMe %>">
+                    <% } else { %>
+                        <input class="textarea" type="text" name="aboutMe" value="Nothing here yet!">
+                    <% } %> 
+                </div> <br>
+                <div class="control">
+                    <button class="button is-link is-light" type="submit">Submit</button>
+                    <a href="/users/profile"><button class="button is-link is-light">Submit</button></a>
+                </div>
+          </div> 
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include("../partials/footer.ejs") %>

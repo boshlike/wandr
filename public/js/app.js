@@ -14,7 +14,6 @@ const toggleVisitedPlanned = async () => {
     const formData = await fetchData(`${location.origin}/fetchformdata/${dataToFetch}`);
     const div = document.querySelector("#form-items");
     div.innerHTML = formData;
-
 }
 const fetchData = async (url) => {
     const response = await fetch(url)

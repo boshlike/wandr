@@ -12,7 +12,7 @@ const placesController = require("./controllers/places/placesController");
 const middleware = require("./middleware/middleware");
 // Create app and port
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 // Set the view engine
 app.set("view engine", "ejs");
 // Add the static files
@@ -38,6 +38,8 @@ app.post("/users/login", usersController.login);
 app.get("/users/logout", usersController.logout);
 app.get("/users/home", middleware.isAuthenticated, usersController.showDashboard);
 app.get("/users/profile", middleware.isAuthenticated, usersController.showProfile);
+app.get("/users/edit", middleware.isAuthenticated, usersController.showEditProfile);
+app.patch("/users/edit", middleware.isAuthenticated, usersController.editProfile);
 //Client side fetch routes
 app.get("/fetchformdata/:data", clientRequestController.getFormData);
 app.get("/fetchmapdata", clientRequestController.getMapsDataObject);

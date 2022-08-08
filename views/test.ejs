@@ -1,46 +1,51 @@
 <table class="table">
-  <tbody>
-      <tr>
-          <th>Place</th>
-          <td><%= userPlace.place %></td>
-      </tr>
-      <tr>
-          <th>Status</th>
-          <td><%= userPlace.visitedPlanned.visitedPlanned.charAt(0).toUpperCase() + visitedPlanned.slice(1) %></td>
-      </tr>
-      <% if (userPlace.visitedPlanned.visitedPlanned === "visited") { %>
-          <tr>
-              <th>Dates</th>
-              <td><%= `${userPlace.visitedPlanned.dateFrom} to ${userPlace.visitedPlanned.dateTo}` %></td>
-          </tr>
-          <tr>
-              <th>Rating</th>
-              <td><%= userPlace.visitedPlanned.rating %></td>
-          </tr>
-          <tr>
-              <th>Notes</th>
-              <td><%= userPlace.visitedPlanned.notes %></td>
-          </tr>
-      <% } else { %>
-          <tr>
-              <th>Notes</th>
-          <td><%= userPlace.visitedPlanned.notes %></td>
-      </tr> 
-      <% } %> 
-  </tbody>
-</table>
-<div>
-  <a class="button" href="/places/edit/<%= _id %> ">Edit</a>
-  <a class="button" href="/places/delete/<%= _id %> ">Delete</a>
-  <a class="button" href="/users/home">Back</a>  
+    <tbody>
+        <tr>
+            <th>Country</th>
+            <td><%= place.countryName %></td>
+        </tr>
+        <tr>
+            <th>Locality</th>
+            <td><%= place.locality %></td>
+        </tr>
+        <tr>
+            <th>Landmark</th>
+            <td><%= place.landmark %></td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td><%= place.visitedPlanned.charAt(0).toUpperCase() + place.visitedPlanned.slice(1) %></td>
+        </tr>
+    </tbody>
+  </table>
+  <form action="/places/edit/<%= place._id %>?_method=PATCH" method="post" class="field" id="edit-item">
+    <% if (place.visitedPlanned === "visited") { %>
+      <label class="label">Date from</label>
+      <div class="control">
+        <input class="input" type="date" name="dateFrom" value="<%= place.dateFrom %>"/>
+      </div>
+      <label class="label">Date to</label>
+      <div class="control">
+        <input class="input" type="date" name="dateTo" value="<%= place.dateTo %>"/>
+      </div>
+      <label class="label">Rating</label>
+      <div class="control">
+        <input class="text" type="number" min="1" max="5" name="rating" value="<%= place.rating %>"/>
+      </div>
+      <label class="label">Notes</label>
+      <div class="control">
+        <input class="textarea" type="text" name="notes" value="<%= place.notes %>"/>
+      </div>
+    <% } else { %>
+      <label class="label">Notes</label>
+      <div class="control">
+        <input class="textarea" type="text" name="notes" value="<%= place.notes%> "/>
+      </div>
+    <% } %> 
+  </form>  
+  <br>
+  <div class="control">
+    <input class="button" type="submit" value="Submit" form="edit-item">
+    <a href="/places/<%= place._id %>"><input class="button" value="Cancel"></a>
+  </div>
 </div>
-<% if (userPlace.visitedPlanned.visitedPlanned === "planned") { %>
-  <div
-    data-skyscanner-widget="SearchWidget"
-    data-locale="en-GB"
-    data-market="SG"
-    data-currency="SGD"
-    data-destination-name="India"
-  ></div>
-  <script src="https://widgets.skyscanner.net/widget-server/js/loader.js" async></script>
-<% } %>
