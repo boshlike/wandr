@@ -95,10 +95,8 @@ const controller = {
         res.render("dash/dash.ejs", {places});
     },
     showProfile: async (req, res) => {
-        let userProfile = null;
         try {
-            userProfile = await userModel.findOne({email: req.session.user}).lean();
-            console.log(userProfile)
+            const userProfile = await userModel.findOne({email: req.session.user}).lean();
             res.render("users/profile.ejs", {userProfile});
         } catch(err) {
             console.log(err);

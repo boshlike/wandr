@@ -25,6 +25,11 @@ body {
     padding: 3em;
     border-radius: 10%;
 }
+#quote {
+    background-color: rgba(141, 207, 208, 0.75);
+    text-shadow: 2px 2px #1e7577;
+    border-radius: 5%;
+}
 /* Home and Map styling */
 #my-map {
     height: 50vh;
