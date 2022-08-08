@@ -7,18 +7,37 @@
         <div class="column">
         <form action="/users/login" method="post">
             <div class="field" id="login">
-            <label class="label">Email</label>
-            <div class="control mb-2">
-              <input class="input" type="text" placeholder="Text input" name="email">
-            </div>
-            <label class="label">Password</label>
-            <div class="control mb-2">
-              <input class="input" type="password" placeholder="Text input" name="password">
-            </div>
-            <div class="control">
-              <button class="button is-link is-light" type="submit">Login</button>
-            </div>
-          </div> 
+              <% if (!errorData) { %>
+                <label class="label">Email</label>
+                <div class="control mb-2">
+                  <input class="input" type="text" placeholder="Text input" name="email">
+                </div>
+                <label class="label">Password</label>
+                <div class="control mb-2">
+                  <input class="input" type="password" placeholder="Text input" name="password">
+                </div>
+                <div class="control">
+                  <button class="button is-link is-light" type="submit">Login</button>
+                </div>
+              <% } else { %>
+                <label class="label">Email</label>
+                <div class="control mb-2">
+                  <input class="input" type="text" placeholder="Text input" name="email" value="<%= errorData.email %>">
+                </div>
+                <label class="label">Password</label>
+                <div class="control mb-2">
+                  <input class="input" type="password" placeholder="Text input" name="password">
+                </div>
+                <div class="control">
+                  <button class="button is-link is-light" type="submit">Login</button>
+                </div>
+                <ul class="mt-3" id="errors">
+                  <% errorData.errMsg.forEach(message => { %>
+                    <li class="has-text-danger"><%= message %></li>
+                  <% }) %>
+                </ul>
+              <% } %> 
+            </div> 
         </form>
         </div>
       </div>

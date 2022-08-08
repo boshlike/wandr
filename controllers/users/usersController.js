@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
-const Joi = require('joi');
 const userModel = require("../../models/users/users");
 const placeModel = require("../../models/places/places");
 const userValidationSchema = require("../../validation/userValidation");
+const loginValidationSchema = require("../../validation/loginValidation");
 const controller = {
     showRegistrationForm: (req, res) => {
         const errorData = null;
@@ -52,37 +52,64 @@ const controller = {
         res.redirect("/users/login");
     },
     displayLoginPage: (req, res) => {
-        res.render("pages/login.ejs");
+        const errorData = null;
+        res.render("pages/login.ejs", {errorData});
     },
     login: async (req, res) => {
-        // TODo validations
-        const validatedResults = req.body;
         let user = null;
+        let validatedResults = null;
+        // Validations
+        try {
+            validatedResults = await loginValidationSchema.validateAsync(req.body, {abortEarly: false});
+        } catch(err) {
+            const errMsg = []
+            err.details.forEach(message => errMsg.push(message.message));
+            const errorData = {
+                errMsg: errMsg,
+                email: req.body.email
+            }
+            res.render("pages/login.ejs", {errorData});
+            return;
+        }
         try {
             user = await userModel.findOne({email: validatedResults.email});
         } catch(err) {
-            res.send(err);
+            console.log(err);
+            res.render("pages/error.ejs", {err});
+            return;
+        }
+        // Check if the user has returned a document and print error message if not
+        if (!user) {
+            const errorData = {
+                errMsg: ["The email address does not exist."],
+                email: req.body.email
+            }
+            res.render("pages/login.ejs", {errorData});
             return;
         }
         // Use bcrypt to compare given password to one stored in DB
         const passwordMatches = await bcrypt.compare(validatedResults.password, user.hash);
         if (!passwordMatches) {
-            res.send('incorrect password');
+            const errorData = {
+                errMsg: ["Your password is incorrect."],
+                email: req.body.email
+            }
+            res.render("pages/login.ejs", {errorData});
             return;
         }
         // Log user in by creating a session
         req.session.regenerate((err) => {
             if (err) {
-                res.send("Unable to regenerate session");
-                console.log(err)
+                console.log(err);
+                res.render("pages/error.ejs", {err});
                 return;
             }
             req.session.user = validatedResults.email;
             // Store user information in the session
             req.session.save((err) => {
                 if (err) {
-                    res.send("Unable to save session");
-                    console.log(err)
+                    console.log(err);
+                    res.render("pages/error.ejs", {err});
                     return;
                 }
                 res.redirect("/users/home")
