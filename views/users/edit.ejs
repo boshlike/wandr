@@ -25,10 +25,17 @@
                 </div> <br>
                 <div class="control">
                     <button class="button is-link is-light" type="submit">Submit</button>
-                    <a href="/users/profile"><button class="button is-link is-light">Submit</button></a>
+                    <a href="/users/profile"><button class="button is-link is-light">Back</button></a>
                 </div>
           </div> 
         </form>
+        <% if (errorData) { %>
+            <ul class="mt-3" id="errors">
+                <% errorData.errMsg.forEach(message => { %>
+                  <li class="has-text-danger"><%= message %></li>
+                <% }) %>
+              </ul>
+        <% } %>
         </div>
       </div>
     </div>

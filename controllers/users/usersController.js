@@ -3,6 +3,7 @@ const userModel = require("../../models/users/users");
 const placeModel = require("../../models/places/places");
 const userValidationSchema = require("../../validation/userValidation");
 const loginValidationSchema = require("../../validation/loginValidation");
+const profileValidationSchema = require("../../validation/profileValidation");
 const controller = {
     showRegistrationForm: (req, res) => {
         const errorData = null;
@@ -141,7 +142,7 @@ const controller = {
             ]);
         } catch(err) {
             console.log(err);
-            res.send("failed to fetch user dashboard");
+            res.render("pages/error.ejs", {err});
             return;
         }
         res.render("dash/dash.ejs", {places});
@@ -152,7 +153,7 @@ const controller = {
             res.render("users/profile.ejs", {userProfile});
         } catch(err) {
             console.log(err);
-            res.send("failed to fetch user profile");
+            res.render("pages/error.ejs", {err});
             return;
         }
     },
@@ -160,12 +161,14 @@ const controller = {
         req.session.user = null;
         req.session.save((err) => {
             if (err) {
-                res.send(err);
+                console.log(err);
+                res.render("pages/error.ejs", {err});
                 return;
             }
             req.session.regenerate((err) => {
                 if (err) {
-                    res.send(err);
+                    console.log(err);
+                    res.render("pages/error.ejs", {err});
                     return;
                 }
                 res.redirect("/");
@@ -174,23 +177,36 @@ const controller = {
     },
     showEditProfile: async (req, res) => {
         try {
-            const userProfile = await userModel.findOne({email: req.session.user});
-            res.render("users/edit.ejs", {userProfile});
+            const userProfile = await userModel.findOne({email: req.session.user}).lean();
+            const errorData = null
+            res.render("users/edit.ejs", {userProfile, errorData});
         } catch(err) {
             console.log(err);
-            res.send("failed to fetch user profile");
+            res.render("pages/error.ejs", {err});
             return;
         }
     },
     editProfile: async (req, res) => {
-        // TODO validation
-        validatedResults = req.body;
+        let validatedResults = null;
+        // Validations
         try {
-            const userProfile = await userModel.updateOne({email: req.session.user}, validatedResults);
+            validatedResults = await profileValidationSchema.validateAsync(req.body, {abortEarly: false});
+        } catch(err) {
+            const userProfile = await userModel.findOne({email: req.session.user}).lean();
+            const errMsg = []
+            err.details.forEach(message => errMsg.push(message.message));
+            const errorData = {
+                errMsg: errMsg
+            }
+            res.render("users/edit.ejs", {userProfile, errorData});
+            return;
+        }
+        try {
+            await userModel.updateOne({email: req.session.user}, validatedResults);
             res.redirect("/users/profile");
         } catch(err) {
             console.log(err);
-            res.send("failed to update profile");
+            res.render("pages/error.ejs", {err});
             return;
         }
     },
@@ -215,7 +231,7 @@ const controller = {
                 return;
             } catch(err) {
                 console.log(err);
-                res.send("failed to delete user");
+                res.render("pages/error.ejs", {err});
                 return;
             }
             
