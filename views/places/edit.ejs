@@ -8,11 +8,13 @@
           <div class="control">
             <input class="input" type="text" name="searchString" value="<%= searchString %>" autocomplete="off" disabled>
           </div> <br>
+            <input type="hidden" name="searchString" value="<%= searchString %>">
+            <input type="hidden" name="place_id" value="<%= place_id %>">
           <% if (visitedPlanned === "visited") { %>
           <div class="control select">
             <select name="visitedPlanned" id="visited-planned" onchange="">
               <option value="visited" selected>Visited</option>
-              <option value="planned">Planned</option>
+              <option value="planned">Visited</option>
             </select>
             </div>
             <label class="label visit">Date from</label>

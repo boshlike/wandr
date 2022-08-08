@@ -34,7 +34,7 @@ const controllers = {
                 countryId = object._id;
             } catch(err) {
                 console.log(err);
-                res.send("failed to create country");
+                res.render("pages/error.ejs", {err});
                 return;
             }
         }
@@ -58,7 +58,7 @@ const controllers = {
                 placeId = object._id;
             } catch(err) {
                 console.log(err);
-                res.send("failed to create country");
+                res.render("pages/error.ejs", {err});
                 return;
             }
         } else {
@@ -70,7 +70,7 @@ const controllers = {
                     placeObject.save();
                 } catch(err) {
                     console.log(err);
-                    res.send("failed to create country");
+                    res.render("pages/error.ejs", {err});
                     return;
                 }
             }
@@ -118,7 +118,7 @@ const controllers = {
             ]);
         } catch(err) {
             console.log(err);
-            res.send("failed to find country");
+            res.render("pages/error.ejs", {err});
             return;
         }
         res.render("places/showUserPlace.ejs", userPlace[0]);
@@ -153,7 +153,7 @@ const controllers = {
             ]);
         } catch(err) {
             console.log(err);
-            res.send("failed to find place to edit");
+            res.render("pages/error.ejs", {err});
             return;
         }
         res.render("places/edit.ejs", userPlace[0]);
@@ -165,33 +165,15 @@ const controllers = {
         const user = req.session.user.toLowerCase();
         const id = ObjectId(req.params.place_id);
         try {
-            await userModel.aggregate([
-                {$match: {email: user}},
-                {$unwind: "$visitedPlanned"},
-                {$match: {"visitedPlanned.place_id": id}},
-                {$lookup: {
-                    from: "places",
-                    localField: "visitedPlanned.place_id",
-                    foreignField: "_id",
-                    as: "place"
-                }},
-                {$unwind: "$place"},
-                {$project: {
-                    _id: 0, 
-                    "visitedPlanned.visitedPlanned": 1,
-                    "visitedPlanned.place_id": 1,
-                    "visitedPlanned.notes": 1,
-                    "visitedPlanned.dateFrom": 1,
-                    "visitedPlanned.dateTo": 1,
-                    "visitedPlanned.rating": 1,   
-                    "place.searchString": 1
-                }},
-                { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
-            ]);
+            await userModel.updateOne(
+                {email: user},
+                {$set: {"visitedPlanned.$[element]": validatedResults}},
+                {arrayFilters: [{ "element.place_id": id }]}
+            )
             res.redirect(`/places/user/${req.params.place_id}`);
         } catch(err) {
-            res.send("failed to update");
             console.log(err);
+            res.render("pages/error.ejs", {err});
             return;
         }
     },
@@ -218,8 +200,8 @@ const controllers = {
                     }
                 }});
             } catch(err) {
-                res.send("failed to delete");
                 console.log(err);
+                res.render("pages/error.ejs", {err});
                 return;
             }
         }
