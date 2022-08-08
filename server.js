@@ -40,6 +40,8 @@ app.get("/users/home", middleware.isAuthenticated, usersController.showDashboard
 app.get("/users/profile", middleware.isAuthenticated, usersController.showProfile);
 app.get("/users/edit", middleware.isAuthenticated, usersController.showEditProfile);
 app.patch("/users/edit", middleware.isAuthenticated, usersController.editProfile);
+app.get("/users/delete", middleware.isAuthenticated, usersController.showDeleteProfile);
+app.delete("/users/delete", middleware.isAuthenticated, usersController.deleteProfile);
 //Client side fetch routes
 app.get("/fetchformdata/:data", clientRequestController.getFormData);
 app.get("/fetchmapdata", clientRequestController.getMapsDataObject);

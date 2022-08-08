@@ -200,9 +200,7 @@ const controllers = {
         res.render("places/delete.ejs", {"_id": id});
     },
     deleteUserPlace: async (req, res) => {
-        console.log(req.params.place_id)
         const id = ObjectId(req.params.place_id)
-        console.log(id)
         if (req.body.yes) {
             try {
                 const userDoc = await userModel.findOneAndUpdate({email: req.session.user}, {$pull: {

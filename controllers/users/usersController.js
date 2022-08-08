@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../../models/users/users");
 const placeModel = require("../../models/places/places");
-const countryModel = require("../../models/places/countries");
 const controller = {
     showRegistrationForm: (req, res) => {
         res.render("pages/register.ejs");
@@ -144,6 +143,34 @@ const controller = {
             res.send("failed to update profile");
             return;
         }
+    },
+    showDeleteProfile: (req, res) => {
+        res.render("users/delete.ejs");
+    },
+    deleteProfile: async (req, res) => {
+        const email = req.session.user;
+        if (req.body.yes) {
+            // Logout and delete the user from the database and all associated ratings
+            try {
+                userDoc = await userModel.findOne({email: email});
+                await placeModel.updateMany({}, {$pull: {
+                    ratings: {
+                        userId: {
+                            $in: [userDoc._id]
+                        }
+                    }
+                }});
+                userDoc.deleteOne();
+                res.redirect("/users/logout");
+                return;
+            } catch(err) {
+                console.log(err);
+                res.send("failed to delete user");
+                return;
+            }
+            
+        }
+        res.redirect("/users/profile");
     }
 }
 module.exports = controller;
