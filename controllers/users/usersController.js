@@ -1,26 +1,51 @@
 const bcrypt = require("bcrypt");
+const Joi = require('joi');
 const userModel = require("../../models/users/users");
 const placeModel = require("../../models/places/places");
+const userValidationSchema = require("../../validation/userValidation");
 const controller = {
     showRegistrationForm: (req, res) => {
-        res.render("pages/register.ejs");
+        const errorData = null;
+        res.render("pages/register.ejs", {errorData});
     },
     register: async (req, res) => {
-        //TODO validations
-        // Ensure passwords match
-        // Ensure no duplicate emails in database
+        let validatedResults = null;
+        // Validations
+        try {
+            validatedResults = await userValidationSchema.validateAsync(req.body, {abortEarly: false});
+        } catch(err) {
+            const errMsg = []
+            err.details.forEach(message => errMsg.push(message.message));
+            const errorData = {
+                errMsg: errMsg,
+                name: req.body.name,
+                email: req.body.email
+            }
+            res.render("pages/register.ejs", {errorData});
+            return;
+        }
         // Hash the password
-        const hash = await bcrypt.hash(req.body.password, 10);
+        const hash = await bcrypt.hash(validatedResults.password, 10);
         // Create the user entry
         try {
             await userModel.create({
-                name: req.body.name,
-                email: req.body.email,
+                name: validatedResults.name,
+                email: validatedResults.email,
                 hash: hash
             })
         } catch(err) {
+            // Ensure no duplicate emails in database. Email is a unique key throwing MongoDB error 11000
+            if (err.code === 11000) {
+                const errorData = {
+                    errMsg: ["The email address already exists"],
+                    name: validatedResults.name,
+                    email: validatedResults.email
+                }
+                res.render("pages/register.ejs", {errorData});
+                return;
+            }
             console.log(err);
-            res.send("failed to create user");
+            res.render("pages/error.ejs", {err});
             return;
         }
         // Redirect to login

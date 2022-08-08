@@ -1,0 +1,16 @@
+<%- include("../partials/head.ejs") %> 
+<%- include("../partials/header.ejs") %>
+<!-- Hero content: will be in the middle -->
+<div class="hero-body is-align-items-start">
+    <div class="container">
+      <div class="section">
+        <h1 class="title is-1">Oops! Something went wrong</h1>
+        <h1 class="subtitle is-3">Error code: <%= err.code %> </h1>
+      </div>
+      <div class="section is-flex is-justify-content-center">
+        <a class="button" href="/users/home">Home</a>
+      </div> 
+    </div>
+  </div>
+</div>
+<%- include("../partials/footer.ejs") %>

@@ -30,6 +30,11 @@ body {
     text-shadow: 2px 2px #1e7577;
     border-radius: 5%;
 }
+/* Sign up page styling */
+#errors {
+    list-style: square;
+    font-weight: bold;
+}
 /* Home and Map styling */
 #my-map {
     height: 50vh;
