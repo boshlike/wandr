@@ -24,9 +24,14 @@ body {
     background-size: cover;
 }
 #sign-up {
-    background-color: rgba(230, 230, 230, 0.5);
-    padding: 3em;
-    border-radius: 10%;
+    background-color: rgba(141, 207, 208, 0.75);
+    padding: 2em;
+    border-radius: 5%;
+    text-shadow: 2px 2px #1e7577;
+    color: aliceblue;
+}
+#sign-up label {
+    color: aliceblue;
 }
 #quote {
     background-color: rgba(141, 207, 208, 0.75);
@@ -41,12 +46,12 @@ body {
 /* Home and Map styling */
 #my-map {
     height: 50vh;
-    width: 70vw;
+    width: 90vw;
     max-width: 550px;
 }
 .box {
     background-color: aliceblue;
     width: 70vw;
-    max-width: 550px;
+    max-width: 305px;
     padding: 0.25rem;
 }

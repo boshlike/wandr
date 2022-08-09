@@ -12,12 +12,24 @@ const controllers = {
         // TODO validations
         const validatedResults = req.body;
         const country = validatedResults.countryCode;
-        let countryObject = await countryModel.findOne({countryCode: `${country}`});
-        const userObject = await userModel.findOne({email: req.session.user});
-        const placeObject = await placeModel.findOne({entityId: validatedResults.entityId});
-        const userId = userObject._id;
-        let countryId = countryObject ? countryObject._id : null;
-        let placeId = placeObject ? placeObject._id : null;
+        let countryObject = null;
+        let userObject = null;
+        let placeObject = null;
+        let userId = null;
+        let countryId = null;
+        let placeId = null;
+        try {
+            countryObject = await countryModel.findOne({countryCode: `${country}`});
+            userObject = await userModel.findOne({email: req.session.user});
+            placeObject = await placeModel.findOne({entityId: validatedResults.entityId});
+            userId = userObject._id;
+            countryId = countryObject ? countryObject._id : null;
+            placeId = placeObject ? placeObject._id : null;
+        } catch(err) {
+            console.log(err);
+            res.render("pages/error.ejs", {err});
+            return;
+        }
         // Check if the country already exists in the database, if not, get geolocation data and store as a country
         if (!countryObject) {
             const url = `http://dev.virtualearth.net/REST/v1/Locations?countryRegion=${country}&key=${process.env.BING_API}`;

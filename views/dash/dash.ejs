@@ -5,26 +5,32 @@
 <script src="/js/maps.js"></script>
 <div class="hero-body is-align-items-start">
     <div class="container">
-      <div class="is-flex is-justify-content-center">
-        <div id="my-map"></div>
-      </div>
-      <div class="is-flex is-flex-direction-column is-align-items-center">
-        <div class="box mb-2 mt-3 is-flex is-justify-content-center" id="control-panel">
-          <button class="button filter is-light is-active" id="all-button">All</button>
-          <button class="button filter is-light">Visited</button>
-          <button class="button filter is-light">Planned</button>
-          <button class="button filter is-light hidden" id="back-button">Back</button>
-          <p id="scope" style="display: none;">country</p>
+      <div class="columns">
+        <div class="column">
+          <div class="is-flex is-justify-content-center">
+            <div id="my-map"></div>
+          </div>
         </div>
-        <div class="box is-flex is-justify-content-center">
-          <ul id="list-panel">
-            <% uniqueCountriesAndPlaces.forEach(country => { %>
-              <li class="<%= country.isVisited ? "visited" : "planned" %> list-item country-li"><a class="country"><%= country.country %></a></li>
-              <% country.places.forEach(place => { %>
-              <li class="<%= place[1] %> <%= country.country.replace(/\s/g, "") %> list-item place hidden"><a href="/places/user/<%= place[2] %>"><%= place[0] %></a></li>
-              <% }) %>
-            <% }) %>
-          </ul>
+        <div class="column is-one-third">
+          <div class="is-flex is-flex-direction-column is-align-items-center">
+            <div class="box mb-2 mt-3 is-flex is-justify-content-center" id="control-panel">
+              <button class="button filter is-light is-active" id="all-button">All</button>
+              <button class="button filter is-light">Visited</button>
+              <button class="button filter is-light">Planned</button>
+              <button class="button filter is-light hidden" id="back-button">Back</button>
+              <p id="scope" style="display: none;">country</p>
+            </div>
+            <div class="box is-flex is-justify-content-center">
+              <ul id="list-panel">
+                <% uniqueCountriesAndPlaces.forEach(country => { %>
+                  <li class="<%= country.isVisited ? "visited" : "planned" %> list-item country-li"><a class="country"><%= country.country %></a></li>
+                  <% country.places.forEach(place => { %>
+                  <li class="<%= place[1] %> <%= country.country.replace(/\s/g, "") %> list-item place hidden"><a href="/places/user/<%= place[2] %>"><%= place[0] %></a></li>
+                  <% }) %>
+                <% }) %>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>

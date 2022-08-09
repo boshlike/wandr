@@ -26,10 +26,9 @@ const controllers = {
               }},
               { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
           ]);
-          console.log(userDataObject)
       } catch(err) {
           console.log(err);
-          res.send("failed to fetch data");
+          res.render("pages/error.ejs", {err});
           return;
       }
       const dataObject ={
@@ -60,9 +59,9 @@ const controllers = {
       	try {
         	placeObject = await placeModel.findById(req.params._id,"countryBbox coordinates visitedPlanned").lean();
       	} catch(err) {
-        	console.log(err);
-        	res.send("failed to get one place");
-        	return;
+            console.log(err);
+            res.render("pages/error.ejs", {err});
+            return;
       	}
 		const credentials = process.env.BING_API;
 		const style = {
