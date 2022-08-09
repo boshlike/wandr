@@ -30,7 +30,9 @@ const fetchObject = async (url) => {
 let dashMap = null;
 async function GetMap() {
     const dataObject = await fetchObject(`${location.origin}/fetchmapdata`);
-    const userCountries = dataObject.userData.map(place => [place.countryCoord, place.visitedPlanned]);
+    const userCountries = dataObject.userData.map(place => [place.countryCoord, place.visitedPlanned, place.countryName, place.countryBbox]);
+    const uniqueUserCountries = getUnique(userCountries);
+    const userPlaces = dataObject.userData.map(place => [place.coordinates, place.visitedPlanned, , place.countryName, place.countryBbox]);
     const locationTopLeft = new Microsoft.Maps.Location(65, 180);
     const locationBotRight = new Microsoft.Maps.Location(-50, -180);
     const map = new Microsoft.Maps.Map('#my-map', {
@@ -49,18 +51,22 @@ async function GetMap() {
     });
     // Add the pins to a pin layer of the map
     const layer = new Microsoft.Maps.Layer("pin");
-    userCountries.forEach(country => {
-        layer.add(createPin(country[0], country[1]));
+    uniqueUserCountries.forEach(country => {
+        layer.add(createPin(country[0], country[1], "country", country[2], true, country[3]));
+    });
+    userPlaces.forEach(place => {
+        layer.add(createPin(place[0], place[1], "place", place[2], false, place[3]));
     });
     map.layers.insert(layer);
     // Access map object outside of function scope
     dashMap = map;
 }
-const createPin = (arr, visitedPlanned) => {
+const createPin = (arr, visitedPlanned, type, country, isVisible, bbox) => {
     const location = new Microsoft.Maps.Location(arr[0], arr[1]);
     const color = visitedPlanned === "visited" ? "red" : "blue"
-    const pin = new Microsoft.Maps.Pushpin(location, {color: color});
-    pin.metadata = visitedPlanned;
+    const pin = new Microsoft.Maps.Pushpin(location, {color: color, visible: isVisible});
+    pin.metadata = {visitedPlanned, type, country, bbox};
+    console.log(pin)
     return pin;
 }
 async function GetMiniMap() {
@@ -85,14 +91,81 @@ async function GetMiniMap() {
     map.entities.push(createPin(dataObject.placeObject.coordinates, color));
 }
 // Function that hides and shows pins depending on if planned or visited is clicked
-function hideShowPins (toShow) {
+function hideShowPinsVisitedPlanned (toShow, scope) {
     const pins = dashMap.layers[0].getPrimitives();
     const pinsLen = pins.length;
     for (let i = 0; i < pinsLen; i++) {
-        if (pins[i].metadata === toShow || toShow === "all") {
+        if ((pins[i].metadata.visitedPlanned === toShow && pins[i].metadata.type === scope) || (toShow === "all" && pins[i].metadata.type === scope)) {
             pins[i].setOptions({visible: true});
         } else {
            pins[i].setOptions({visible: false}); 
         }
     }
+}
+function hideShowPlacesCountriesPins (scope, countryName) {
+    const pins = dashMap.layers[0].getPrimitives();
+    const pinsLen = pins.length;
+    if (scope === "country") {
+        // If its the countries/world view, zoom out to world view
+        zoomMap(false);
+        // If its the countries/world view, only show the pins that are countries
+        for (let i = 0; i < pinsLen; i++) {
+            if (pins[i].metadata.type === scope) {
+                pins[i].setOptions({visible: true});
+            } else {
+                pins[i].setOptions({visible: false});
+            }
+        }
+        return;
+    }
+    // If its the country view, zoom to the country bbox
+    let bbox = null;
+    for (let i = 0; i < pinsLen; i++) {
+        if (pins[i].metadata.country === countryName) {
+            bbox = pins[i].metadata.bbox;
+            break;
+        }
+    }
+    zoomMap(true, bbox);
+    // If its the country view, only show the pins for places in that country
+    for (let i = 0; i < pinsLen; i++) {
+        if (pins[i].metadata.type === scope) {
+            pins[i].setOptions({visible: true});
+        } else {
+            pins[i].setOptions({visible: false});
+        }
+    }
+}
+function zoomMap (isZoomIn, bbox) {
+    if (!isZoomIn) {
+        const locationTopLeft = new Microsoft.Maps.Location(65, 180);
+        const locationBotRight = new Microsoft.Maps.Location(-50, -180);
+        dashMap.setView({
+            bounds: new Microsoft.Maps.LocationRect.fromCorners(locationTopLeft, locationBotRight),
+            zoom: 0
+        })
+        return;
+    }
+    const locationTopLeft = new Microsoft.Maps.Location(bbox[0], bbox[1]);
+    const locationBotRight = new Microsoft.Maps.Location(bbox[2], bbox[3]);
+    dashMap.setView({
+        bounds: new Microsoft.Maps.LocationRect.fromCorners(locationTopLeft, locationBotRight),
+        zoom: 0
+    })
+}
+function getUnique(arr) {
+    const uniqueCountryNames = [];
+    const uniqueIndex = [];
+    const uniqueUserCountries = [];
+    arr.forEach((item, index) => {
+        if (!uniqueCountryNames.includes(item[2])) {
+            uniqueCountryNames.push(item[2]);
+            uniqueIndex.push(index);
+        }
+    
+    })
+    uniqueIndex.forEach(idxNum => {
+        uniqueUserCountries.push(arr[idxNum]);
+    })
+    return uniqueUserCountries;
 }

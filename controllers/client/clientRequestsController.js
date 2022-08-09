@@ -19,10 +19,14 @@ const controllers = {
               {$project: {
                   _id: 0, 
                   "visitedPlanned.visitedPlanned": 1,
-                  "place.countryCoord": 1
+                  "place.countryCoord": 1,
+                  "place.coordinates": 1,
+                  "place.countryName": 1,
+                  "place.countryBbox": 1
               }},
               { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
           ]);
+          console.log(userDataObject)
       } catch(err) {
           console.log(err);
           res.send("failed to fetch data");

@@ -161,13 +161,11 @@ const controller = {
                 return countryPlace;
             });
             res.render("dash/dash.ejs", {uniqueCountriesAndPlaces});
-            console.log(uniqueCountriesAndPlaces);
         } catch(err) {
             console.log(err);
             res.render("pages/error.ejs", {err});
             return;
         }
-        
     },
     showProfile: async (req, res) => {
         try {

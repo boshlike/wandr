@@ -55,7 +55,8 @@ document.querySelector("#control-panel").onclick = (event) => {
     // Add is active to tab clicked
     event.target.classList.add("is-active");
     const targetName =  event.target.innerText;
-    hideShowPins(targetName.toLowerCase());
+    const scope = document.querySelector("#scope").innerText;
+    hideShowPinsVisitedPlanned(targetName.toLowerCase(), scope);
     // Add is-active to the relevant visited, planned or both
     const list = document.getElementsByClassName("list-item");
     for (let i = 0, len = list.length; i < len; i++) {
@@ -89,8 +90,11 @@ document.querySelector("#list-panel").onclick = (event) => {
         return;
     }
     const countries = document.getElementsByClassName("country-li");
+    // Zoom the map and show the pins
     const places = document.getElementsByClassName("place");
-    // Hide the countries from view
+    hideShowPlacesCountriesPins("place", event.target.innerText);
+    // Hide the countries from view and change the scope
+    document.querySelector("#scope").innerText = "place";
     for (let i = 0, len = countries.length; i < len; i++) {
         countries[i].classList.add("hidden");
     }
@@ -110,10 +114,11 @@ document.querySelector("#back-button").onclick = () => {
     // Zoom out the map
     const countries = document.getElementsByClassName("country-li");
     const places = document.getElementsByClassName("place");
-    // Hide the places
+    // Hide the places and change the scope
+    document.querySelector("#scope").innerText = "country";
+    hideShowPlacesCountriesPins("country", null);
     for (let i = 0, len = places.length; i < len; i++) {
         places[i].classList.add("hidden");
-        
     }
     // Show the countries
     for (let i = 0, len = countries.length; i < len; i++) {
