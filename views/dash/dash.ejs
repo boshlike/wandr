@@ -21,7 +21,7 @@
             <% uniqueCountriesAndPlaces.forEach(country => { %>
               <li class="<%= country.isVisited ? "visited" : "planned" %> list-item country-li"><a class="country"><%= country.country %></a></li>
               <% country.places.forEach(place => { %>
-              <li class="<%= place[1] %> <%= country.country %> list-item place hidden"><a href="/places/user/<%= place[2] %>"><%= place[0] %></a></li>
+              <li class="<%= place[1] %> <%= country.country.replace(/\s/g, "") %> list-item place hidden"><a href="/places/user/<%= place[2] %>"><%= place[0] %></a></li>
               <% }) %>
             <% }) %>
           </ul>

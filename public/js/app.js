@@ -71,7 +71,7 @@ const panelLogic = (event) => {
             case "Back":
                 break;
             case "All":
-                list[i].removeAttribute("style");list
+                list[i].removeAttribute("style");
                 break;
             case "Visited":
                 if (list[i].classList.contains("visited")) {
@@ -92,7 +92,6 @@ const panelLogic = (event) => {
 }
 // Toggle panel view in home dashboard
 document.querySelector("#control-panel").onclick = (event) => {
-    console.log(event);
     panelLogic(event);
 }
 // Toggle country view to places view
@@ -114,7 +113,7 @@ document.querySelector("#list-panel").onclick = (event) => {
     document.querySelector("#back-button").classList.remove("hidden");
     // Show the places within that specific country
     for (let i = 0, len = places.length; i < len; i++) {
-        if (places[i].classList.contains(event.target.innerText)) {
+        if (places[i].classList.contains(event.target.innerText.replace(/\s/g, ""))) {
             places[i].classList.remove("hidden");
         }
     }
