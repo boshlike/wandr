@@ -37,17 +37,24 @@ const fetchData = async (url) => {
     const data = await response.json()
     return data;
 }
-// Toggle panel view in home dashboard
-document.querySelector("#control-panel").onclick = (event) => {
+const panelLogic = (event) => {
     // If the user does not click on a panel button then do nothing
     if (event.target.classList.contains("box")) {
         return;
     }
-    // If the icon clicked is already active then do nothing
-    if (event.target.classList.contains("is-active")) {
+    // If the icon clicked is already active and is not the back button then do nothing
+    if (event.target.classList.contains("is-active") && event.target.id !== "back-button") {
         return;
     }
-    // Remove is active from other tabs
+    // If the back button is the target, set the target to the All button instead
+    if (event.target.id === "back-button") {
+        const allButton = document.querySelector("#all-button");
+        const event = new PointerEvent("click", {composed: true, bubbles: true});
+        console.log(event)
+        allButton.dispatchEvent(event);
+        return;
+    }
+    // Remove is active from other buttons
     const buttonOptions = event.target.parentNode.children;
     for (let i = 0, len = buttonOptions.length; i < len; i++) {
         buttonOptions[i].classList.remove("is-active")
@@ -82,6 +89,11 @@ document.querySelector("#control-panel").onclick = (event) => {
                 break;
         }
     }
+}
+// Toggle panel view in home dashboard
+document.querySelector("#control-panel").onclick = (event) => {
+    console.log(event);
+    panelLogic(event);
 }
 // Toggle country view to places view
 document.querySelector("#list-panel").onclick = (event) => {

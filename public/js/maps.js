@@ -33,13 +33,12 @@ async function GetMap() {
     const userCountries = dataObject.userData.map(place => [place.countryCoord, place.visitedPlanned, place.countryName, place.countryBbox]);
     const uniqueUserCountries = getUnique(userCountries);
     const userPlaces = dataObject.userData.map(place => [place.coordinates, place.visitedPlanned, , place.countryName, place.countryBbox]);
-    const locationTopLeft = new Microsoft.Maps.Location(65, 180);
+    const locationTopLeft = new Microsoft.Maps.Location(50, 180);
     const locationBotRight = new Microsoft.Maps.Location(-50, -180);
     const map = new Microsoft.Maps.Map('#my-map', {
         credentials: dataObject.credentials ,
         bounds: new Microsoft.Maps.LocationRect.fromCorners(locationBotRight, locationTopLeft),
         mapTypeId: Microsoft.Maps.MapTypeId.grayscale,
-        zoom: 0,
         disableMapTypeSelectorMouseOver: true,
         disableScrollWheelZoom: true,
         disablePanning: true,
@@ -66,7 +65,6 @@ const createPin = (arr, visitedPlanned, type, country, isVisible, bbox) => {
     const color = visitedPlanned === "visited" ? "red" : "blue"
     const pin = new Microsoft.Maps.Pushpin(location, {color: color, visible: isVisible});
     pin.metadata = {visitedPlanned, type, country, bbox};
-    console.log(pin)
     return pin;
 }
 async function GetMiniMap() {
@@ -138,12 +136,13 @@ function hideShowPlacesCountriesPins (scope, countryName) {
 }
 function zoomMap (isZoomIn, bbox) {
     if (!isZoomIn) {
-        const locationTopLeft = new Microsoft.Maps.Location(65, 180);
+        const locationTopLeft = new Microsoft.Maps.Location(50, 180);
         const locationBotRight = new Microsoft.Maps.Location(-50, -180);
+        const center = new Microsoft.Maps.Location(0, 0);
         dashMap.setView({
-            bounds: new Microsoft.Maps.LocationRect.fromCorners(locationTopLeft, locationBotRight),
-            zoom: 0
-        })
+            bounds: new Microsoft.Maps.LocationRect(center, 360, -100),
+        });
+        dashMap.setView({center: center})
         return;
     }
     const locationTopLeft = new Microsoft.Maps.Location(bbox[0], bbox[1]);
