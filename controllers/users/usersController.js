@@ -140,12 +140,34 @@ const controller = {
                 }},
                 { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
             ]);
+            const countries = places.map(place => {
+                return place.countryName;
+            })
+            const uniqueCountries = [...new Set(countries)];
+            const uniqueCountriesAndPlaces = uniqueCountries.map((country) => {
+                const countryPlace = {
+                    country: country,
+                    isVisited: false,
+                    places: []
+                }
+                places.forEach(place => {
+                    if (place.countryName === country) {
+                        countryPlace.places.push([place.searchString, place.visitedPlanned, place.place_id]);
+                        if (place.visitedPlanned === "visited") {
+                            countryPlace.isVisited = true;
+                        }
+                    }
+                })
+                return countryPlace;
+            });
+            res.render("dash/dash.ejs", {uniqueCountriesAndPlaces});
+            console.log(uniqueCountriesAndPlaces);
         } catch(err) {
             console.log(err);
             res.render("pages/error.ejs", {err});
             return;
         }
-        res.render("dash/dash.ejs", {places});
+        
     },
     showProfile: async (req, res) => {
         try {

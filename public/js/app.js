@@ -16,7 +16,6 @@ const toggleVisitedPlanned = () => {
     // Get the form HTML from the server and store in an element
     const visitedPlanned = document.querySelector("#visited-planned");
     const disableElements = document.querySelectorAll(".disable");
-    console.log(visitedPlanned.value)
     if (visitedPlanned.value === "planned") {
         // Just set the notes field as enabled and clear the other fields
         disableElements.forEach((element, index) => {
@@ -39,9 +38,9 @@ const fetchData = async (url) => {
     return data;
 }
 // Toggle panel view in home dashboard
-document.querySelector("#panel-block").onclick = (event) => {
+document.querySelector("#control-panel").onclick = (event) => {
     // If the user does not click on a panel button then do nothing
-    if (event.target.classList.contains("panel-tabs")) {
+    if (event.target.classList.contains("box")) {
         return;
     }
     // If the icon clicked is already active then do nothing
@@ -49,35 +48,75 @@ document.querySelector("#panel-block").onclick = (event) => {
         return;
     }
     // Remove is active from other tabs
-    const panelNavOptions = event.target.parentNode.children;
-    for (let i = 0, len = panelNavOptions.length; i < len; i++) {
-        panelNavOptions[i].classList.remove("is-active")
+    const buttonOptions = event.target.parentNode.children;
+    for (let i = 0, len = buttonOptions.length; i < len; i++) {
+        buttonOptions[i].classList.remove("is-active")
     }
     // Add is active to tab clicked
     event.target.classList.add("is-active");
-    const targetName =  event.target.text;
+    const targetName =  event.target.innerText;
     hideShowPins(targetName.toLowerCase());
     // Add is-active to the relevant visited, planned or both
-    const panelBlock = document.getElementsByClassName("panel-block");
-    for (let i = 0, len = panelBlock.length; i < len; i++) {
+    const list = document.getElementsByClassName("list-item");
+    for (let i = 0, len = list.length; i < len; i++) {
         switch(targetName) {
+            case "Back":
+                break;
             case "All":
-                panelBlock[i].removeAttribute("style");
+                list[i].removeAttribute("style");list
                 break;
             case "Visited":
-                if (panelBlock[i].classList.contains("visited")) {
-                    panelBlock[i].removeAttribute("style");
+                if (list[i].classList.contains("visited")) {
+                    list[i].removeAttribute("style");
                 } else {
-                    panelBlock[i].style.display = "none";
+                    list[i].style.display = "none";
                 }
                 break;
             case "Planned":
-                if (panelBlock[i].classList.contains("planned")) {
-                    panelBlock[i].removeAttribute("style");
+                if (list[i].classList.contains("planned")) {
+                    list[i].removeAttribute("style");
                 } else {
-                    panelBlock[i].style.display = "none";
+                    list[i].style.display = "none";
                 }
                 break;
         }
+    }
+}
+// Toggle country view to places view
+document.querySelector("#list-panel").onclick = (event) => {
+    // If the user does not click on a country then do nothing
+    if (!event.target.classList.contains("country")) {
+        return;
+    }
+    const countries = document.getElementsByClassName("country-li");
+    const places = document.getElementsByClassName("place");
+    // Hide the countries from view
+    for (let i = 0, len = countries.length; i < len; i++) {
+        countries[i].classList.add("hidden");
+    }
+    //Make the back button visible
+    document.querySelector("#back-button").classList.remove("hidden");
+    // Show the places within that specific country
+    for (let i = 0, len = places.length; i < len; i++) {
+        if (places[i].classList.contains(event.target.innerText)) {
+            places[i].classList.remove("hidden");
+        }
+    }
+}
+// Logic for back button
+document.querySelector("#back-button").onclick = () => {
+    // Make the back button invisible
+    document.querySelector("#back-button").classList.add("hidden");
+    // Zoom out the map
+    const countries = document.getElementsByClassName("country-li");
+    const places = document.getElementsByClassName("place");
+    // Hide the places
+    for (let i = 0, len = places.length; i < len; i++) {
+        places[i].classList.add("hidden");
+        
+    }
+    // Show the countries
+    for (let i = 0, len = countries.length; i < len; i++) {
+        countries[i].classList.remove("hidden");
     }
 }

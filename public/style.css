@@ -3,6 +3,9 @@ body {
     font-family: 'Indie Flower', cursive;
     font-weight: bold;
 }
+.hidden {
+    display: none;
+}
 /* Navbar styling */
 .hero-head {
     background-color: rgba(230, 230, 230, 0.25);
@@ -41,8 +44,9 @@ body {
     width: 70vw;
     max-width: 550px;
 }
-.panel {
+.box {
     background-color: aliceblue;
     width: 70vw;
     max-width: 550px;
+    padding: 0.25rem;
 }
