@@ -32,7 +32,7 @@ const controllers = {
         }
         // Check if the country already exists in the database, if not, get geolocation data and store as a country
         if (!countryObject) {
-            const url = `http://dev.virtualearth.net/REST/v1/Locations?countryRegion=${country}&key=${process.env.BING_API}`;
+            const url = `https://dev.virtualearth.net/REST/v1/Locations?countryRegion=${country}&key=${process.env.BING_API}`;
             const data = await helpers.fetchData(url);
             const countryDocument = {
                 name: data.data.resourceSets[0].resources[0].name,
