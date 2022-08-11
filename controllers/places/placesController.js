@@ -124,7 +124,8 @@ const controllers = {
                     "visitedPlanned.dateFrom": 1,
                     "visitedPlanned.dateTo": 1,
                     "visitedPlanned.rating": 1,   
-                    "place.searchString": 1
+                    "place.searchString": 1,
+                    "place.countryName": 1
                 }},
                 { $replaceRoot: { newRoot: { $mergeObjects: [ "$visitedPlanned", "$place" ] } } }
             ]);
@@ -218,6 +219,44 @@ const controllers = {
             }
         }
         res.redirect("/users/home");
+    },
+    showInspiration: async (req, res) => {
+        const topFive = await placeModel.aggregate([
+            {$match: {}},
+            {$unwind: "$ratings"},
+            {$group: {
+                _id: "$searchString",
+                averageRating: {$avg: "$ratings.rating"}
+            }},
+            {$sort: {"averageRating": -1}},
+            {$limit: 5}
+        ]);
+        const mostVisits = await userModel.aggregate([
+            {$match: {}},
+            {$unwind: "$visitedPlanned"},
+
+            {$match: {"visitedPlanned.visitedPlanned": "visited"}},
+            {$group: {
+                _id: "$visitedPlanned.place_id",
+                count: {$sum: 1}
+            }},
+            {$lookup: {
+                from: "places",
+                localField: "_id",
+                foreignField: "_id",
+                as: "place"
+            }},
+            {$unwind: "$place"},
+            {$project: {
+                _id: 0, 
+                "count": 1,  
+                "place.searchString": 1
+            }},
+            {$sort: {"count": -1}},
+            {$limit: 5}
+        ]);
+        console.log(mostVisits);
+        res.render("pages/inspire.ejs", {topFive, mostVisits});
     }
 }
 module.exports = controllers;

@@ -53,6 +53,7 @@ app.get("/places/user/edit/:place_id", middleware.isAuthenticated, placesControl
 app.patch("/places/user/edit/:place_id", middleware.isAuthenticated, placesController.editUserPlace);
 app.get("/places/user/delete/:place_id", middleware.isAuthenticated, placesController.showDeleteUserPlace);
 app.delete("/places/user/delete/:place_id", middleware.isAuthenticated, placesController.deleteUserPlace);
+app.get("/places/inspire", placesController.showInspiration);
 //Landing route
 app.get("/", (req, res) => {
     res.render("landing.ejs");
