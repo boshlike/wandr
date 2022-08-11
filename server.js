@@ -12,7 +12,7 @@ const placesController = require("./controllers/places/placesController");
 const middleware = require("./middleware/middleware");
 // Create app and port
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 // Set the view engine
 app.set("view engine", "ejs");
 // Add the static files
@@ -53,10 +53,6 @@ app.get("/places/user/edit/:place_id", middleware.isAuthenticated, placesControl
 app.patch("/places/user/edit/:place_id", middleware.isAuthenticated, placesController.editUserPlace);
 app.get("/places/user/delete/:place_id", middleware.isAuthenticated, placesController.showDeleteUserPlace);
 app.delete("/places/user/delete/:place_id", middleware.isAuthenticated, placesController.deleteUserPlace);
-//Test routes to be deleted
-app.get("/test", (req, res) => {
-    res.render("test.ejs");
-});
 //Landing route
 app.get("/", (req, res) => {
     res.render("landing.ejs");

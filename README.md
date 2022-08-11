@@ -5,17 +5,29 @@ A cross between travel log and travel planning that allows users to add places t
 
 ## User Stories (with those achieved and failed)
 
-* The user arrives at the landing page and is able to register an account 
-* The user can create an account and receives error messages if validations fail
-* The user logs in and arrives at their dashboard, which is a map with pins and a list of countries. There is filtering to filter the list of places.
-* A user can click on a country and the map zooms, showing the places tagged within that country.
-* A user can click on the add country and come to a form to fill in details which will be saved to the database and saved against the user. These entries can be updated. Photos can be added when a user is logging a place.
-* A user profile showing details about the user.
-* Ability to follow other users and see their entries.
-* A newsfeed that updates when you other users add places.
-* An inspiration page where users can see top rated places, most visited, most planned etc.
+* The user arrives at the landing page and is able to register an account :heavy_check_mark:
+* The user can create an account and receives error messages if validations fail :heavy_check_mark:
+* The user logs in and arrives at their dashboard, which is a map with pins and a list of countries. There is filtering to filter the list of places. :heavy_check_mark:
+* A user can click on a country and the map zooms, showing the places tagged within that country. :heavy_check_mark:
+* A user can click on the add country and come to a form to fill in details which will be saved to the database and saved against the user. These entries can be updated. Photos can be added when a user is logging a place. :heavy_check_mark:
+* A user profile showing details about the user. :heavy_check_mark:
+* Ability to follow other users and see their entries. :x:
+* A newsfeed that updates when you other users add places. :x:
+* An inspiration page where users can see top rated places, most visited, most planned etc. :x:
 
 ## Link to App
+
+TBC
+
+## RESTful routes
+
+* GET
+* NEW - New user registration page, new place creation page
+* SHOW - Show user profile, show place details, show dashboard of user
+* POST - Create new place, create new user
+* EDIT - Edit user profile details page, edit a place page
+* PUT/PATCH - Submit changes to user profile and place
+* DELETE - Delete user profile and delete place
 
 ## Technologies and Packages Used
 
@@ -39,10 +51,12 @@ A cross between travel log and travel planning that allows users to add places t
 ## Problems Faced
 
 * Finalising the MongoDB data structure to encapsulate the requirements and minimise calls to Bing maps. I had to redesign the structure more than once to accommodate some features.
-* The map features. Bing documentation is not particularly user friendly. 
+* Mongoose and MongoDB generally had quite steep learning curves and a lot of errors before finally working. Update tags especially are 
+* The map features. Bing documentation is not particularly user friendly and a lot of trial and error was required.
 
 ## Future Feature Ideas
 
 * An ability to follow other users and see when they update their profiles
 * Ability to upload a gallery of images for each place visited
 * Create more features for the inspiration page, such as suggestions from external sources such as Trip Advisor or Culture Trip.
+* Tailored suggestions based on your trips
