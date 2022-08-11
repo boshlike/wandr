@@ -3,6 +3,10 @@ body {
     font-family: 'Indie Flower', cursive;
     font-weight: bold;
 }
+.title {
+    color: aliceblue;
+    text-shadow: 2px 2px #1e7577;
+}
 .hidden {
     display: none;
 }

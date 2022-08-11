@@ -1,43 +1,40 @@
-<%- include("../partials/head.ejs") %> 
-<%- include("../partials/header.ejs") %>
+<%- include("../partials/head.ejs") %> <%- include("../partials/header.ejs") %>
 <!-- Hero content: will be in the middle -->
 <div class="hero-body is-align-items-start">
-    <div class="container">
-        <div class="columns">
-            <div class="column is-flex is-justify-content-center">
-                <figure class="image mx-0">
-                    <img class="is-rounded" src="/img/person-icon.png">
-                </figure>
-            </div>
-            <div class="column">
-                <div class="content is-normal">
-                    <h1>User Profile</h1>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <th>Name</th>
-                                <td><%= userProfile.name %> </td>
-                            </tr>
-                            <tr>
-                                <th>Email</th>
-                                <td><%= userProfile.email %> </td>
-                            </tr>
-                            <tr>
-                                <th>About Me</th>
-                                <td><% if (userProfile.aboutMe) { %>
-                                    <%= userProfile.aboutMe %> 
-                                <% } else { %>
-                                    Nothing here yet!
-                                <% } %>  
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                  <a class="button" href="/users/edit">Edit Profile</a>
-                  <a class="button" href="/users/delete">Delete Account</a>
-            </div>
+  <div class="container">
+    <div class="columns">
+      <div class="column is-flex is-justify-content-center">
+        <figure class="image mx-0">
+          <img class="is-rounded" src="/img/person-icon.png" />
+        </figure>
+      </div>
+      <div class="column">
+        <h1 class="title">User Profile</h1>
+        <div class="content is-normal">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th>Name</th>
+                <td><%= userProfile.name %></td>
+              </tr>
+              <tr>
+                <th>Email</th>
+                <td><%= userProfile.email %></td>
+              </tr>
+              <tr>
+                <th>About Me</th>
+                <td>
+                  <% if (userProfile.aboutMe) { %> <%= userProfile.aboutMe %> <%
+                  } else { %> Nothing here yet! <% } %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+        <a class="button" href="/users/edit">Edit Profile</a>
+        <a class="button" href="/users/delete">Delete Account</a>
+      </div>
     </div>
+  </div>
 </div>
 <%- include("../partials/footer.ejs") %>

@@ -3,28 +3,51 @@
 <script src="/js/maps.js"></script>
 <div class="hero-body is-align-items-start">
   <div class="container is-flex is-justify-content-center">
-    <div class="section">
-        <h1 class="title">Top Rated</h1>
-      <table class="table">
-        <thead>
-          <th>Pos.</th>
-          <th>Place</th>
-          <th>Average Rating</th>
-        </thead>
-        <tbody>
-          <% topFive.forEach((place, index) => { %>
-          <tr>
-            <th><%= (index + 1) %></th>
-            <td><%= place._id %></td>
-            <td class="has-text-centered"><%= place.averageRating %></td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
-    </div>
-    <div class="section">
-        <h1 class="title">Most Visited</h1>
-        <table class="table">
+    <div class="columns">
+      <div class="column">
+        <div class="section">
+          <h1 class="title">Top Rated</h1>
+          <table class="table">
+            <thead>
+              <th>Pos.</th>
+              <th>Place</th>
+              <th>Average Rating</th>
+            </thead>
+            <tbody>
+              <% topFive.forEach((place, index) => { %>
+              <tr>
+                <th><%= (index + 1) %></th>
+                <td><%= place._id %></td>
+                <td class="has-text-centered"><%= place.averageRating %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <div class="section">
+          <h1 class="title">Bottom Rated</h1>
+          <table class="table">
+            <thead>
+              <th>Pos.</th>
+              <th>Place</th>
+              <th>Average Rating</th>
+            </thead>
+            <tbody>
+              <% bottomFive.forEach((place, index) => { %>
+              <tr>
+                <th><%= (index + 1) %></th>
+                <td><%= place._id %></td>
+                <td class="has-text-centered"><%= place.averageRating %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="column">
+        <div class="section">
+          <h1 class="title">Most Visited</h1>
+          <table class="table">
             <thead>
               <th>Pos.</th>
               <th>Place</th>
@@ -39,7 +62,9 @@
               </tr>
               <% }) %>
             </tbody>
-        </table>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

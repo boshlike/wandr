@@ -231,6 +231,16 @@ const controllers = {
             {$sort: {"averageRating": -1}},
             {$limit: 5}
         ]);
+        const bottomFive = await placeModel.aggregate([
+            {$match: {}},
+            {$unwind: "$ratings"},
+            {$group: {
+                _id: "$searchString",
+                averageRating: {$avg: "$ratings.rating"}
+            }},
+            {$sort: {"averageRating": 1}},
+            {$limit: 5}
+        ]);
         const mostVisits = await userModel.aggregate([
             {$match: {}},
             {$unwind: "$visitedPlanned"},
@@ -254,7 +264,7 @@ const controllers = {
             {$sort: {"count": -1}},
             {$limit: 5}
         ]);
-        res.render("pages/inspire.ejs", {topFive, mostVisits});
+        res.render("pages/inspire.ejs", {topFive, bottomFive, mostVisits});
     },
     showBeen: (req, res) => {
         res.render("pages/been.ejs");

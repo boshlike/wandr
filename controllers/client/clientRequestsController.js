@@ -83,7 +83,8 @@ const controllers = {
         {$project: {
             _id: 0, 
             "place.coordinates": 1
-        }}
+        }},
+        {$limit: 50}
       ]);
       const colors = ["black", "silver", "gray", "white", "maroon", "red", "purple", "fuchsia", "green", "lime", "olive", "yellow", "navy", "blue", "teal", "aqua"];
       res.json({allPlacesVisited, credentials, style, colors});
