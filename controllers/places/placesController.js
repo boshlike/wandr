@@ -234,7 +234,6 @@ const controllers = {
         const mostVisits = await userModel.aggregate([
             {$match: {}},
             {$unwind: "$visitedPlanned"},
-
             {$match: {"visitedPlanned.visitedPlanned": "visited"}},
             {$group: {
                 _id: "$visitedPlanned.place_id",
@@ -255,8 +254,10 @@ const controllers = {
             {$sort: {"count": -1}},
             {$limit: 5}
         ]);
-        console.log(mostVisits);
         res.render("pages/inspire.ejs", {topFive, mostVisits});
+    },
+    showBeen: (req, res) => {
+        res.render("pages/been.ejs");
     }
 }
 module.exports = controllers;

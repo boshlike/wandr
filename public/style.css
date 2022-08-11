@@ -44,7 +44,7 @@ body {
     font-weight: bold;
 }
 /* Home and Map styling */
-#my-map {
+#my-map, #my-total-map {
     height: 50vh;
     width: 90vw;
     max-width: 550px;

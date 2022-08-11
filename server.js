@@ -43,6 +43,7 @@ app.patch("/users/edit", middleware.isAuthenticated, usersController.editProfile
 app.get("/users/delete", middleware.isAuthenticated, usersController.showDeleteProfile);
 app.delete("/users/delete", middleware.isAuthenticated, usersController.deleteProfile);
 //Client side fetch routes
+app.get("/fetchmapdata/fetchall", clientRequestController.fetchAll);
 app.get("/fetchmapdata", clientRequestController.getMapsDataObject);
 app.get("/fetchmapdata/places/user/:_id", clientRequestController.getOnePlaceData);
 //Places routes
@@ -54,6 +55,7 @@ app.patch("/places/user/edit/:place_id", middleware.isAuthenticated, placesContr
 app.get("/places/user/delete/:place_id", middleware.isAuthenticated, placesController.showDeleteUserPlace);
 app.delete("/places/user/delete/:place_id", middleware.isAuthenticated, placesController.deleteUserPlace);
 app.get("/places/inspire", placesController.showInspiration);
+app.get("/places/users/all", placesController.showBeen);
 //Landing route
 app.get("/", (req, res) => {
     res.render("landing.ejs");

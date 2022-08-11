@@ -168,3 +168,31 @@ function getUnique(arr) {
     })
     return uniqueUserCountries;
 }
+async function getTotalMap() {
+    const dataObject = await fetchObject(`${location.origin}/fetchmapdata/fetchall`);
+    const locationTopLeft = new Microsoft.Maps.Location(50, 180);
+    const locationBotRight = new Microsoft.Maps.Location(-50, -180);
+    const map = new Microsoft.Maps.Map('#my-total-map', {
+        credentials: dataObject.credentials ,
+        bounds: new Microsoft.Maps.LocationRect.fromCorners(locationBotRight, locationTopLeft),
+        mapTypeId: Microsoft.Maps.MapTypeId.grayscale,
+        disableMapTypeSelectorMouseOver: true,
+        disableScrollWheelZoom: true,
+        disablePanning: true,
+        disableZooming: true,
+        showLocateMeButton: false,
+        showMapTypeSelector: false,
+        customMapStyle: dataObject.style,
+        showScalebar: false
+    });
+    // Add the pins to a pin layer of the map
+    const colorLen = dataObject.colors.length;
+    const layer = new Microsoft.Maps.Layer("pin");
+    dataObject.allPlacesVisited.forEach(place => {
+        const location = new Microsoft.Maps.Location(place.place.coordinates[0], place.place.coordinates[1]);
+        const color = dataObject.colors[Math.floor(Math.random()*colorLen)];
+        const pin = new Microsoft.Maps.Pushpin(location, {color: color});
+        layer.add(pin);
+    });
+    map.layers.insert(layer);
+}

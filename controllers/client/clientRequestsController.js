@@ -1,6 +1,24 @@
 require("dotenv").config();
 const userModel = require("../../models/users/users");
 const placeModel = require("../../models/places/places");
+const credentials = process.env.BING_API;
+const style = {
+  "version": "1.*",
+  "settings": {
+    "landColor": "#FFF9F6D8"
+  },
+  "elements": {
+    "baseMapElement": {
+    "labelVisible": false
+    },
+    "area": {
+    "visible": false
+    },
+    "water": {
+    "fillColor": "#8DCFD0"
+    }
+  }
+}
 const controllers = {
     getMapsDataObject: async (req, res) => {
       const user = req.session.user.toLowerCase();
@@ -33,24 +51,8 @@ const controllers = {
       }
       const dataObject ={
         userData: userDataObject,
-        credentials: process.env.BING_API,
-        style: {
-          "version": "1.*",
-          "settings": {
-            "landColor": "#FFF9F6D8"
-          },
-          "elements": {
-            "baseMapElement": {
-              "labelVisible": false
-            },
-            "area": {
-              "visible": false
-            },
-            "water": {
-              "fillColor": "#8DCFD0"
-            }
-          }
-        }
+        credentials,
+        style
       }
       res.json(dataObject);
     },
@@ -63,25 +65,33 @@ const controllers = {
             res.render("pages/error.ejs", {err});
             return;
       	}
-		const credentials = process.env.BING_API;
-		const style = {
-			"version": "1.*",
-			"settings": {
-			  "landColor": "#FFF9F6D8"
-			},
-			"elements": {
-			  "baseMapElement": {
-				"labelVisible": false
-			  },
-			  "area": {
-				"visible": false
-			  },
-			  "water": {
-				"fillColor": "#8DCFD0"
-			  }
-			}
-		  }
 		res.json({placeObject, credentials, style});
-	}
+	},
+  fetchAll: async (req, res) => {
+    try {
+      const allPlacesVisited = await userModel.aggregate([
+        {$match: {}},
+        {$unwind: "$visitedPlanned"},
+        {$match: {"visitedPlanned.visitedPlanned": "visited"}},
+        {$lookup: {
+            from: "places",
+            localField: "visitedPlanned.place_id",
+            foreignField: "_id",
+            as: "place"
+        }},
+        {$unwind: "$place"},
+        {$project: {
+            _id: 0, 
+            "place.coordinates": 1
+        }}
+      ]);
+      const colors = ["black", "silver", "gray", "white", "maroon", "red", "purple", "fuchsia", "green", "lime", "olive", "yellow", "navy", "blue", "teal", "aqua"];
+      res.json({allPlacesVisited, credentials, style, colors});
+    } catch(err) {
+      console.log(err);
+      res.render("pages/error.ejs", {err});
+      return;
+    }
+  }
 }
 module.exports = controllers;
