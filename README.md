@@ -13,11 +13,11 @@ A cross between travel log and travel planning that allows users to add places t
 * A user profile showing details about the user. :heavy_check_mark:
 * Ability to follow other users and see their entries. :x:
 * A newsfeed that updates when you other users add places. :x:
-* An inspiration page where users can see top rated places, most visited, most planned etc. :x:
+* An inspiration page where users can see top rated places, most visited, most planned etc. :heavy_check_mark:
 
 ## Link to App
 
-TBC
+[Wandr](https://wandr-travel-app.herokuapp.com/)
 
 ## RESTful routes
 

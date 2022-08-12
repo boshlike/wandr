@@ -1,69 +1,72 @@
 <%- include("../partials/head.ejs") %> <%- include("../partials/header.ejs") %>
 <!-- Hero content: will be in the middle -->
+<script
+  type="text/javascript"
+  src="https://www.bing.com/api/maps/mapcontrol?callback=getTotalMap"
+  async
+  defer
+></script>
 <script src="/js/maps.js"></script>
 <div class="hero-body is-align-items-start">
-  <div class="container is-flex is-justify-content-center">
-    <div class="columns">
+  <div class="container">
+    <div class="is-flex is-justify-content-center">
+      <div class="column" id="my-total-map"></div>
+    </div>
+    <div class="columns mt-3">
       <div class="column">
-        <div class="section">
-          <h1 class="title">Top Rated</h1>
-          <table class="table">
-            <thead>
-              <th>Pos.</th>
-              <th>Place</th>
-              <th>Average Rating</th>
-            </thead>
-            <tbody>
-              <% topFive.forEach((place, index) => { %>
-              <tr>
-                <th><%= (index + 1) %></th>
-                <td><%= place._id %></td>
-                <td class="has-text-centered"><%= place.averageRating %></td>
-              </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
-        <div class="section">
-          <h1 class="title">Bottom Rated</h1>
-          <table class="table">
-            <thead>
-              <th>Pos.</th>
-              <th>Place</th>
-              <th>Average Rating</th>
-            </thead>
-            <tbody>
-              <% bottomFive.forEach((place, index) => { %>
-              <tr>
-                <th><%= (index + 1) %></th>
-                <td><%= place._id %></td>
-                <td class="has-text-centered"><%= place.averageRating %></td>
-              </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
+        <h1 class="title">Top Rated</h1>
+        <table class="table">
+          <thead>
+            <th>Pos.</th>
+            <th>Place</th>
+            <th>Average Rating</th>
+          </thead>
+          <tbody>
+            <% topFive.forEach((place, index) => { %>
+            <tr>
+              <th><%= (index + 1) %></th>
+              <td><%= place._id %></td>
+              <td class="has-text-centered"><%= place.averageRating %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <h1 class="title">Bottom Rated</h1>
+        <table class="table">
+          <thead>
+            <th>Pos.</th>
+            <th>Place</th>
+            <th>Average Rating</th>
+          </thead>
+          <tbody>
+            <% bottomFive.forEach((place, index) => { %>
+            <tr>
+              <th><%= (index + 1) %></th>
+              <td><%= place._id %></td>
+              <td class="has-text-centered"><%= place.averageRating %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
       </div>
       <div class="column">
-        <div class="section">
-          <h1 class="title">Most Visited</h1>
-          <table class="table">
-            <thead>
-              <th>Pos.</th>
-              <th>Place</th>
-              <th>Num. Visited</th>
-            </thead>
-            <tbody>
-              <% mostVisits.forEach((place, index) => { %>
-              <tr>
-                <th><%= (index + 1) %></th>
-                <td><%= place.place.searchString %></td>
-                <td class="has-text-centered"><%= place.count %></td>
-              </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
+        <h1 class="title">Most Visited</h1>
+        <table class="table">
+          <thead>
+            <th>Pos.</th>
+            <th>Place</th>
+            <th>Num. Visited</th>
+          </thead>
+          <tbody>
+            <% mostVisits.forEach((place, index) => { %>
+            <tr>
+              <th><%= (index + 1) %></th>
+              <td><%= place.place.searchString %></td>
+              <td class="has-text-centered"><%= place.count %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
