@@ -17,7 +17,7 @@ A cross between travel log and travel planning that allows users to add places t
 
 ## Link to App
 
-[Wandr](https://wandr-travel-app.herokuapp.com/)
+[Wandr](https://wandr-0h26.onrender.com)
 
 ## RESTful routes
 
